@@ -1,0 +1,67 @@
+\documentclass[10pt,letterpaper]{article}
+
+\usepackage{cvpr}
+\usepackage{times}
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{etoolbox}\AtBeginEnvironment{algorithmic}{\footnotesize}
+
+% Include other packages here, before hyperref.
+
+% If you comment hyperref and then uncomment it, you should delete
+% egpaper.aux before re-running latex.  (Or just hit 'q' on the first latex
+% run, let it finish, and you should be clear).
+\usepackage[breaklinks=true,bookmarks=false]{hyperref}
+
+\cvprfinalcopy % *** Uncomment this line for the final submission
+
+\def\cvprPaperID{****} % *** Enter the CVPR Paper ID here
+\def\httilde{\mbox{\tt\raisebox{-.5ex}{\symbol{126}}}}
+
+% Pages are numbered in submission mode, and unnumbered in camera-ready
+%\ifcvprfinal\pagestyle{empty}\fi
+\setcounter{page}{1}
+\begin{document}
+
+%%%%%%%%% TITLE
+\title{A Parallelized Framework for Evolutionary Computation}
+
+\author{
+	Geoffrey Saxton Long (\textit{260403840})\\
+	McGill University, Quebec \\
+	{\tt\small Geoffrey.Long@mail.mcgill.ca}
+}
+
+\maketitle
+%\thispagestyle{empty}
+
+%%%%%%%%% ABSTRACT
+\begin{abstract}
+Evolutionary algorithms are a common approach to problems with indeterminate strategies or lengthy computation times when exact results are not necessary. The goal of this project is to implement an extensible framework which allows for parallelization of an evolutionary algorithm. Although computation speed is a primary goal, I would also like to see the outcomes where "populations" of individuals are allowed to evolve in partial, or complete, isolation from one another. Each one of these populations would be implemented on a multithreaded Beowulf cluster, exposure to other populations would occur via MPI message passing. Within each cluster the populations would be evolved through different mutation, crossover, and fitness evaluation methods. This variance in operators would ensure that the populations diverge. 
+
+This framework will implement a genetic algorithm. Although the algorithm will be tested with the Travelling Salesperson Algorithm, it will be designed to work with a wide variety of problems. The overall performance of the framework will be evaluated on the results and speedup compared to the sequential version. 
+\end{abstract}
+
+% http://watchmaker.uncommons.org/manual/ch01s02.html
+% EC is good for problems where you know what comprises a good solution, but you don't necessarily know how to reach this solution. 
+
+
+\subsection{Introduction}
+
+
+
+\subsection{Background}
+
+\subsection{Implementation}
+
+\subsection{Results}
+
+\subsection{Conclusions}
+
+
+
+\end{document}
