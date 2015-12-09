@@ -11,7 +11,7 @@ using namespace std;
 
 class City {
   public:
-    City(int nodeNum, double x, double y);
+    City(int nodeNum, double x, double y) : nodeNum(nodeNum), x(x), y(y) {};
     int getNodeNum() {return nodeNum;}
     double getX() {return x;}
     double getY() {return y;}
@@ -21,12 +21,6 @@ class City {
     double y;
 };
 
-
-City::City(int nodeNum, double x, double y){
-  this->nodeNum = nodeNum;
-  this->x = x;
-  this->y = y;
-}
 
 int main(){
   // Use knowledge of the dataset size...
