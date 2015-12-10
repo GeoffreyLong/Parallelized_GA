@@ -8,9 +8,19 @@
 #include <ctime>
 #include <cstdlib>
 #include <math.h> 
+#include <limits>
+#include <sys/time.h>
+#include <ctime>
 
 using namespace std;
+typedef unsigned long long timestamp_t;
 
+
+static timestamp_t get_timestamp () {
+  struct timeval now;
+  gettimeofday (&now, NULL);
+  return  now.tv_usec + (timestamp_t)now.tv_sec * 1000000;
+}
 
 class City {
   public:
@@ -56,6 +66,8 @@ double calculate_fitness(vector<int> tour){
 }
 
 int main(){
+  timestamp_t t0 = get_timestamp();
+
   srand(time(0));
   // Use knowledge of the dataset size...
   ifstream inFile("DataSets/eil51.tsp"); int tourSize = 51;
@@ -111,47 +123,41 @@ int main(){
     population.push_back(tour);
   }
   
-
-  double bestFitness = 100000000.0;
+  // Run the algorithm for a specific number of iterations
   int nIteration = 0;
   while (nIteration < maxNumIterations){
     for (int i = 0; i < populationSize; i++){
       vector<int> tour = population[i];
-      
-
-
-      /*
-      // Clone the original
-      vector<int> newTour;
-      for (int j = 0; j < tourSize; j++){
-        newTour.push_back(tour[j]);
-      }
-      */
-
       vector<int> newTour = mutate(tour);
 
+      // Calculate the fitness of both tours
       double fitnessOne = calculate_fitness(tour);
       double fitnessTwo = calculate_fitness(newTour);
-      //cout << "First " << fitnessOne << endl;
-      //cout << "Second " << fitnessTwo << endl;
 
+      // Take the better performing individual
       if (fitnessTwo < fitnessOne){
         population[i] = newTour;
       }
-
-      double fitnessBetter = calculate_fitness(population[i]);
-    
-      if (fitnessBetter < bestFitness){
-        bestFitness = fitnessBetter;
-        cout << bestFitness << endl;
-      }
     }
-  
 
     nIteration ++;
   }
 
+  double bestFitness = std::numeric_limits<double>::max();
+  for (int i = 0; i < populationSize; i++){
+    vector<int> tour = population[i];
+    double curFitness = calculate_fitness(tour);
 
+    if (curFitness < bestFitness){
+      bestFitness = curFitness;
+    }
+  }
+
+  timestamp_t t1 = get_timestamp();
+  double execTime = (t1 - t0) / 1000000.0L;
+
+  cout << bestFitness << " " << execTime << endl;
+  
 
   return 0;
 }
