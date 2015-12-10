@@ -66,98 +66,112 @@ double calculate_fitness(vector<int> tour){
 }
 
 int main(){
-  timestamp_t t0 = get_timestamp();
+  int nTimes = 10;
 
-  srand(time(0));
-  // Use knowledge of the dataset size...
-  ifstream inFile("DataSets/eil51.tsp"); int tourSize = 51;
-  
-  
-  int populationSize = 100;
-  int maxNumIterations = 20000;
+  for (int populationSize = 100; populationSize <= 100000; populationSize *= 10){
+    for (int maxNumIterations = 100; maxNumIterations <= 100000; maxNumIterations *= 100){
+      double overallFitness = 0;
+      double overallTime = 0;
 
-  if (!inFile) {
-    cerr << "Input file not found." << endl;
-    return -1;
-  }
+      for (int x = 0; x < nTimes; x ++){
+        timestamp_t t0 = get_timestamp();
 
-
-  string line;
-  while (std::getline(inFile, line)){
-    if (line.empty()) continue;
-  
-    istringstream iss(line);
-    int nodeNum;
-    double x, y;
+        srand(time(0));
+        // Use knowledge of the dataset size...
+        ifstream inFile("DataSets/eil51.tsp"); int tourSize = 51;
+        
+        if (!inFile) {
+          cerr << "Input file not found." << endl;
+          return -1;
+        }
 
 
-    // Not entirely sure that this will work for all files...
-    // If the input stream does not have three args it is not a tour location
-    if (!(iss >> nodeNum >> x >> y)) { continue; }
+        string line;
+        while (std::getline(inFile, line)){
+          if (line.empty()) continue;
+        
+          istringstream iss(line);
+          int nodeNum;
+          double x, y;
 
 
-    cities.push_back(City(nodeNum, x, y));
+          // Not entirely sure that this will work for all files...
+          // If the input stream does not have three args it is not a tour location
+          if (!(iss >> nodeNum >> x >> y)) { continue; }
 
-    // Check output
-    //cout << nodeNum << " " << x << " " << y << endl;
-  }
 
-  // Initialize population randomly
-  vector< vector< int > > population;
-  for (int i = 0; i < populationSize; i++){
-    vector<int> tour;
-    // Set the arrays
-    // I haven't found a way to do this dynamically yet
-    for (int j = 0; j < tourSize; j++){
-      tour.push_back(j);
+          cities.push_back(City(nodeNum, x, y));
+
+          // Check output
+          //cout << nodeNum << " " << x << " " << y << endl;
+        }
+
+        // Initialize population randomly
+        vector< vector< int > > population;
+        for (int i = 0; i < populationSize; i++){
+          vector<int> tour;
+          // Set the arrays
+          // I haven't found a way to do this dynamically yet
+          for (int j = 0; j < tourSize; j++){
+            tour.push_back(j);
+          }
+
+          // Scramble the values of the arrays
+          for (int j = 0; j < tourSize; j++){
+            int index = rand() % tourSize;
+            int temp = tour[j];
+            tour[j] = tour[index];
+            tour[index] = temp;
+          }
+
+          population.push_back(tour);
+        }
+        
+        // Run the algorithm for a specific number of iterations
+        int nIteration = 0;
+        while (nIteration < maxNumIterations){
+          for (int i = 0; i < populationSize; i++){
+            vector<int> tour = population[i];
+            vector<int> newTour = mutate(tour);
+
+            // Calculate the fitness of both tours
+            double fitnessOne = calculate_fitness(tour);
+            double fitnessTwo = calculate_fitness(newTour);
+
+            // Take the better performing individual
+            if (fitnessTwo < fitnessOne){
+              population[i] = newTour;
+            }
+          }
+
+          nIteration ++;
+        }
+
+        double bestFitness = std::numeric_limits<double>::max();
+        for (int i = 0; i < populationSize; i++){
+          vector<int> tour = population[i];
+          double curFitness = calculate_fitness(tour);
+
+          if (curFitness < bestFitness){
+            bestFitness = curFitness;
+          }
+        }
+
+        timestamp_t t1 = get_timestamp();
+        double execTime = (t1 - t0) / 1000000.0L;
+
+        //cout << bestFitness << " " << execTime << endl;
+        overallFitness += bestFitness;
+        overallTime += execTime;
+      } 
+
+      double time = overallTime / nTimes;
+      double fitness = overallFitness / nTimes;
+      cout << "PopulationSize=" << populationSize << " maxNumIterations="
+        << maxNumIterations << " Fitness=" << fitness << " Time=" << time << endl;
     }
-
-    // Scramble the values of the arrays
-    for (int j = 0; j < tourSize; j++){
-      int index = rand() % tourSize;
-      int temp = tour[j];
-      tour[j] = tour[index];
-      tour[index] = temp;
-    }
-
-    population.push_back(tour);
   }
-  
-  // Run the algorithm for a specific number of iterations
-  int nIteration = 0;
-  while (nIteration < maxNumIterations){
-    for (int i = 0; i < populationSize; i++){
-      vector<int> tour = population[i];
-      vector<int> newTour = mutate(tour);
-
-      // Calculate the fitness of both tours
-      double fitnessOne = calculate_fitness(tour);
-      double fitnessTwo = calculate_fitness(newTour);
-
-      // Take the better performing individual
-      if (fitnessTwo < fitnessOne){
-        population[i] = newTour;
-      }
-    }
-
-    nIteration ++;
-  }
-
-  double bestFitness = std::numeric_limits<double>::max();
-  for (int i = 0; i < populationSize; i++){
-    vector<int> tour = population[i];
-    double curFitness = calculate_fitness(tour);
-
-    if (curFitness < bestFitness){
-      bestFitness = curFitness;
-    }
-  }
-
-  timestamp_t t1 = get_timestamp();
-  double execTime = (t1 - t0) / 1000000.0L;
-
-  cout << bestFitness << " " << execTime << endl;
-  
-
+      
   return 0;
+
 }

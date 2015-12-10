@@ -50,18 +50,100 @@ This framework will implement a genetic algorithm. Although the algorithm will b
 % EC is good for problems where you know what comprises a good solution, but you don't necessarily know how to reach this solution. 
 
 
-\subsection{Introduction}
+\section{Introduction}
+Evolutionary Computation is a branch of computational intelligence commonly used to solve problems with multiple parameters or complex relationships between the parameters, multiple local optima, or no known approach to solving the problem. The term Evolutionary computation covers several different implementations. These are evolutionary programming, genetic programming, genetic algorithms, and evolution strategies. Although the approaches to each of these frameworks is slightly different, they all have the same general structure and themes. Central to all of them is the adherance to Darwinian principles. 
+
+The darwinian principles central to evolutionary computation are those of evolution by natural selection. This is commonly broken into four main themes:
+\begin{enumerate}
+\item More individuals are produced each generation than can survive
+\item Variation exists amoung individuals, this variation is inhertiable
+\item Those individuals with inherited traits better suited to the environment will survive
+\item When reproductive isolation occurs a new species will form
+\end{enumerate}
 
 
 
-\subsection{Background}
+survival of the fittest (natural selection), mutation, mating, 
+As the name suggests, Evolutionary Computation methods follow the common themes of evolution as described by Darwin. 
 
-\subsection{Implementation}
+\subsection{Terminology}
+In Evolutionary Computation you have a set of \textit{individuals}, also known as a \textit{population}. Each of these individuals is a possible solution to the problem. The way in which the solution is encoded is often unique to the problem and the implementation of the problem. At its core though, the solution must be formed in such a way that it can be changed by the evolutionary operators in the framework. 
 
-\subsection{Results}
+The evolutionary operators most commonly used are \textit{mutation} and \textit{crossover}. Although mutation is present in all evolutionary computation methods, crossover is often specific to genetic algorithms. Mutation is the alteration of an individual via a slight change in their genetic makeup. This typically happens by changing a value of one of the individual's alleles or by switching two or more alleles. As a result, the resultant individual after mutation is slightly different than the original. Crossover involves the creation of a new individual by the combination of two "parent" individuals. Parents are often selected by their genetic fitness, though selection can be random. These crossover operators usually involve combining the two parents to create one or more new individuals. 
 
-\subsection{Conclusions}
 
+\section{Background}
+
+\section{Implementation}
+
+\section{Results}
+
+\section{Conclusions}
+
+
+
+
+\section{Results}
+Simple Sequential: 10 Times
+PopulationSize=100 maxNumIterations=100 Fitness=1017.85 Time=0.0613324
+PopulationSize=100 maxNumIterations=1000 Fitness=645.782 Time=0.575131
+PopulationSize=100 maxNumIterations=10000 Fitness=499.665 Time=5.7481
+PopulationSize=1000 maxNumIterations=100 Fitness=959.017 Time=0.578648
+PopulationSize=1000 maxNumIterations=1000 Fitness=619.99 Time=5.72552
+PopulationSize=1000 maxNumIterations=10000 Fitness=481.792 Time=57.2282
+PopulationSize=10000 maxNumIterations=100 Fitness=927.328 Time=5.8533
+PopulationSize=10000 maxNumIterations=1000 Fitness=597.724 Time=58.0144
+PopulationSize=10000 maxNumIterations=10000 Fitness=466.729 Time=586.332
+
+
+PopulationSize=100 maxNumIterations=100 Fitness=1006.61 Time=0.0594495
+PopulationSize=200 maxNumIterations=100 Fitness=971.531 Time=0.116636
+PopulationSize=300 maxNumIterations=100 Fitness=983.57 Time=0.179451
+PopulationSize=400 maxNumIterations=100 Fitness=940.753 Time=0.23334
+PopulationSize=500 maxNumIterations=100 Fitness=985.453 Time=0.292069
+PopulationSize=600 maxNumIterations=100 Fitness=995.133 Time=0.353345
+PopulationSize=700 maxNumIterations=100 Fitness=976.031 Time=0.438044
+PopulationSize=800 maxNumIterations=100 Fitness=959.766 Time=0.466137
+PopulationSize=900 maxNumIterations=100 Fitness=969.391 Time=0.522619
+PopulationSize=1000 maxNumIterations=100 Fitness=972.207 Time=0.585324
+PopulationSize=2000 maxNumIterations=100 Fitness=942.047 Time=1.17845
+PopulationSize=3000 maxNumIterations=100 Fitness=938.467 Time=1.88575
+PopulationSize=4000 maxNumIterations=100 Fitness=940.066 Time=2.37096
+PopulationSize=5000 maxNumIterations=100 Fitness=927.209 Time=3.02321
+PopulationSize=6000 maxNumIterations=100 Fitness=920.407 Time=3.73201
+PopulationSize=7000 maxNumIterations=100 Fitness=919.812 Time=4.54565
+PopulationSize=8000 maxNumIterations=100 Fitness=922.916 Time=5.10203
+PopulationSize=9000 maxNumIterations=100 Fitness=929.764 Time=5.55095
+PopulationSize=10000 maxNumIterations=100 Fitness=925.476 Time=6.07093
+
+
+PopulationSize=100 maxNumIterations=100 Fitness=1005.18 Time=0.0612377
+PopulationSize=100 maxNumIterations=200 Fitness=879.523 Time=0.117883
+PopulationSize=100 maxNumIterations=300 Fitness=800.886 Time=0.174866
+PopulationSize=100 maxNumIterations=400 Fitness=791.031 Time=0.237152
+PopulationSize=100 maxNumIterations=500 Fitness=716.329 Time=0.292422
+PopulationSize=100 maxNumIterations=600 Fitness=700.984 Time=0.351435
+PopulationSize=100 maxNumIterations=700 Fitness=698.819 Time=0.41049
+PopulationSize=100 maxNumIterations=800 Fitness=685.63 Time=0.476722
+PopulationSize=100 maxNumIterations=900 Fitness=667.82 Time=0.530665
+PopulationSize=100 maxNumIterations=1000 Fitness=650.368 Time=0.59416
+PopulationSize=100 maxNumIterations=2000 Fitness=573.286 Time=1.23812
+PopulationSize=100 maxNumIterations=3000 Fitness=534.997 Time=1.79002
+PopulationSize=100 maxNumIterations=4000 Fitness=521.264 Time=2.36564
+PopulationSize=100 maxNumIterations=5000 Fitness=510.855 Time=2.95029
+PopulationSize=100 maxNumIterations=6000 Fitness=503.941 Time=3.781
+PopulationSize=100 maxNumIterations=7000 Fitness=505.155 Time=4.3372
+PopulationSize=100 maxNumIterations=8000 Fitness=498.558 Time=4.94316
+PopulationSize=100 maxNumIterations=9000 Fitness=502.808 Time=5.59283
+PopulationSize=100 maxNumIterations=10000 Fitness=497.015 Time=6.0404
+
+
+\section{Sources}
+% http://courses.cs.washington.edu/courses/cse466/05sp/pdfs/lectures/10-EvolutionaryComputation.pdf
+% http://evolution.berkeley.edu/evolibrary/article/evo_25
+% https://www.ndsu.edu/pubweb/~mcclean/plsc431/popgen/popgen5.htm
+% http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/
+%	Used the symmetric TSP stuff
 
 
 \end{document}
