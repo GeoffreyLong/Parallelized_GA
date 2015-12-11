@@ -84,7 +84,8 @@ The evolutionary operators most commonly used are \textit{mutation} and \textit{
 
 
 \section{Results}
-\subsection{Simple Sequential} 
+\subsection{My Computer}
+\subsubsection{Simple Sequential} 
 RUN 10 TIMES 
 PopulationSize=100 maxNumIterations=100 Fitness=1017.85 Time=0.0613324
 PopulationSize=100 maxNumIterations=1000 Fitness=645.782 Time=0.575131
@@ -199,6 +200,52 @@ Threads=1 PopulationSize=7500 maxNumIterations=750 Fitness=629.423 Time=32.7403
 Threads=1 PopulationSize=7500 maxNumIterations=1000 Fitness=598.176 Time=43.8414
 Threads=1 PopulationSize=7500 maxNumIterations=2500 Fitness=517.645 Time=109.159
 Threads=1 PopulationSize=7500 maxNumIterations=5000 Fitness=480.321 Time=218.388
+
+
+
+
+\subsubsection{Simple Parallel}
+RUN 10 TIMES (omp parallel and for both in the while (right before the for individuals stuff)) 2 THREADS
+PopulationSize=100 maxNumIterations=100 Fitness=1003.31 Time=0.0358858
+PopulationSize=200 maxNumIterations=100 Fitness=998.235 Time=0.0725388
+PopulationSize=300 maxNumIterations=100 Fitness=981.249 Time=0.107817
+PopulationSize=400 maxNumIterations=100 Fitness=971.596 Time=0.146068
+PopulationSize=500 maxNumIterations=100 Fitness=975.714 Time=0.179915
+PopulationSize=600 maxNumIterations=100 Fitness=978.491 Time=0.218115
+PopulationSize=700 maxNumIterations=100 Fitness=966.815 Time=0.25133
+PopulationSize=800 maxNumIterations=100 Fitness=960.749 Time=0.289994
+PopulationSize=900 maxNumIterations=100 Fitness=959.462 Time=0.334228
+PopulationSize=1000 maxNumIterations=100 Fitness=955.028 Time=0.364628
+PopulationSize=2000 maxNumIterations=100 Fitness=940.927 Time=0.757064
+PopulationSize=3000 maxNumIterations=100 Fitness=944.8 Time=1.14028
+PopulationSize=4000 maxNumIterations=100 Fitness=932.714 Time=1.51587
+PopulationSize=5000 maxNumIterations=100 Fitness=930.809 Time=1.85731
+PopulationSize=6000 maxNumIterations=100 Fitness=922.009 Time=2.16985
+PopulationSize=7000 maxNumIterations=100 Fitness=925.795 Time=2.49315
+PopulationSize=8000 maxNumIterations=100 Fitness=926.701 Time=3.12936
+PopulationSize=9000 maxNumIterations=100 Fitness=912.24 Time=3.4196
+PopulationSize=10000 maxNumIterations=100 Fitness=911.197 Time=3.61859
+
+PopulationSize=100 maxNumIterations=100 Fitness=1003.84 Time=0.0362115
+PopulationSize=100 maxNumIterations=200 Fitness=885.472 Time=0.0697153
+PopulationSize=100 maxNumIterations=300 Fitness=810.234 Time=0.10538
+PopulationSize=100 maxNumIterations=400 Fitness=765.987 Time=0.140573
+PopulationSize=100 maxNumIterations=500 Fitness=737.545 Time=0.175368
+PopulationSize=100 maxNumIterations=600 Fitness=712.19 Time=0.209136
+PopulationSize=100 maxNumIterations=700 Fitness=688.094 Time=0.243928
+PopulationSize=100 maxNumIterations=800 Fitness=671.372 Time=0.2775
+PopulationSize=100 maxNumIterations=900 Fitness=662.667 Time=0.313015
+PopulationSize=100 maxNumIterations=1000 Fitness=633.387 Time=0.353189
+PopulationSize=100 maxNumIterations=2000 Fitness=575.679 Time=0.697184
+PopulationSize=100 maxNumIterations=3000 Fitness=539.347 Time=1.04379
+PopulationSize=100 maxNumIterations=4000 Fitness=524.03 Time=1.40013
+PopulationSize=100 maxNumIterations=5000 Fitness=510.585 Time=1.74719
+PopulationSize=100 maxNumIterations=6000 Fitness=507.043 Time=2.09527
+PopulationSize=100 maxNumIterations=7000 Fitness=498.536 Time=2.47446
+PopulationSize=100 maxNumIterations=8000 Fitness=498.93 Time=2.8139
+PopulationSize=100 maxNumIterations=9000 Fitness=498.2 Time=3.24105
+PopulationSize=100 maxNumIterations=10000 Fitness=497.364 Time=3.51496
+
 
 RUN ON MY COMP OVERNIGHT V1.1
 Threads=1 PopulationSize=250 maxNumIterations=250 Fitness=827.438 Time=0.361495
@@ -428,48 +475,525 @@ Threads=64 PopulationSize=2500 maxNumIterations=1000 Fitness=602.039 Time=9.6441
 Threads=64 PopulationSize=2500 maxNumIterations=2500 Fitness=521.813 Time=23.9955
 
 
-\subsection{Simple Parallel}
-\subsubsection{V1.1}
-RUN 10 TIMES (omp parallel and for both in the while (right before the for individuals stuff)) 2 THREADS
-PopulationSize=100 maxNumIterations=100 Fitness=1003.31 Time=0.0358858
-PopulationSize=200 maxNumIterations=100 Fitness=998.235 Time=0.0725388
-PopulationSize=300 maxNumIterations=100 Fitness=981.249 Time=0.107817
-PopulationSize=400 maxNumIterations=100 Fitness=971.596 Time=0.146068
-PopulationSize=500 maxNumIterations=100 Fitness=975.714 Time=0.179915
-PopulationSize=600 maxNumIterations=100 Fitness=978.491 Time=0.218115
-PopulationSize=700 maxNumIterations=100 Fitness=966.815 Time=0.25133
-PopulationSize=800 maxNumIterations=100 Fitness=960.749 Time=0.289994
-PopulationSize=900 maxNumIterations=100 Fitness=959.462 Time=0.334228
-PopulationSize=1000 maxNumIterations=100 Fitness=955.028 Time=0.364628
-PopulationSize=2000 maxNumIterations=100 Fitness=940.927 Time=0.757064
-PopulationSize=3000 maxNumIterations=100 Fitness=944.8 Time=1.14028
-PopulationSize=4000 maxNumIterations=100 Fitness=932.714 Time=1.51587
-PopulationSize=5000 maxNumIterations=100 Fitness=930.809 Time=1.85731
-PopulationSize=6000 maxNumIterations=100 Fitness=922.009 Time=2.16985
-PopulationSize=7000 maxNumIterations=100 Fitness=925.795 Time=2.49315
-PopulationSize=8000 maxNumIterations=100 Fitness=926.701 Time=3.12936
-PopulationSize=9000 maxNumIterations=100 Fitness=912.24 Time=3.4196
-PopulationSize=10000 maxNumIterations=100 Fitness=911.197 Time=3.61859
+Threads=1 PopulationSize=250 maxNumIterations=250 Fitness=818.194 Time=0.359018
+Threads=2 PopulationSize=250 maxNumIterations=250 Fitness=826.954 Time=0.21485
+Threads=3 PopulationSize=250 maxNumIterations=250 Fitness=822.341 Time=0.25503
+Threads=4 PopulationSize=250 maxNumIterations=250 Fitness=835.738 Time=0.207794
+Threads=6 PopulationSize=250 maxNumIterations=250 Fitness=837.735 Time=0.241521
+Threads=8 PopulationSize=250 maxNumIterations=250 Fitness=831.888 Time=0.247596
+Threads=16 PopulationSize=250 maxNumIterations=250 Fitness=832.055 Time=0.253676
+Threads=32 PopulationSize=250 maxNumIterations=250 Fitness=825.278 Time=0.27675
+Threads=64 PopulationSize=250 maxNumIterations=250 Fitness=833.19 Time=0.306297
+Threads=1 PopulationSize=250 maxNumIterations=500 Fitness=720.369 Time=0.719803
+Threads=2 PopulationSize=250 maxNumIterations=500 Fitness=717.751 Time=0.429932
+Threads=3 PopulationSize=250 maxNumIterations=500 Fitness=730.224 Time=0.514763
+Threads=4 PopulationSize=250 maxNumIterations=500 Fitness=722.217 Time=0.414799
+Threads=6 PopulationSize=250 maxNumIterations=500 Fitness=724.376 Time=0.476687
+Threads=8 PopulationSize=250 maxNumIterations=500 Fitness=726.167 Time=0.495639
+Threads=16 PopulationSize=250 maxNumIterations=500 Fitness=717.861 Time=0.515082
+Threads=32 PopulationSize=250 maxNumIterations=500 Fitness=717.953 Time=0.561179
+Threads=64 PopulationSize=250 maxNumIterations=500 Fitness=728.096 Time=0.625177
+Threads=1 PopulationSize=250 maxNumIterations=750 Fitness=662.876 Time=1.08194
+Threads=2 PopulationSize=250 maxNumIterations=750 Fitness=662.293 Time=0.672258
+Threads=3 PopulationSize=250 maxNumIterations=750 Fitness=664.512 Time=0.773224
+Threads=4 PopulationSize=250 maxNumIterations=750 Fitness=661.295 Time=0.635441
+Threads=6 PopulationSize=250 maxNumIterations=750 Fitness=672.046 Time=0.736717
+Threads=8 PopulationSize=250 maxNumIterations=750 Fitness=662.489 Time=0.770343
+Threads=16 PopulationSize=250 maxNumIterations=750 Fitness=662.528 Time=0.875926
+Threads=32 PopulationSize=250 maxNumIterations=750 Fitness=656.991 Time=0.980977
+Threads=64 PopulationSize=250 maxNumIterations=750 Fitness=663.826 Time=1.0811
+Threads=1 PopulationSize=250 maxNumIterations=1000 Fitness=628.448 Time=1.44433
+Threads=2 PopulationSize=250 maxNumIterations=1000 Fitness=635.779 Time=0.883313
+Threads=3 PopulationSize=250 maxNumIterations=1000 Fitness=623.14 Time=1.00848
+Threads=4 PopulationSize=250 maxNumIterations=1000 Fitness=634.638 Time=0.864354
+Threads=6 PopulationSize=250 maxNumIterations=1000 Fitness=632.241 Time=0.969977
+Threads=8 PopulationSize=250 maxNumIterations=1000 Fitness=634.462 Time=1.02695
+Threads=16 PopulationSize=250 maxNumIterations=1000 Fitness=632.52 Time=1.17065
+Threads=32 PopulationSize=250 maxNumIterations=1000 Fitness=644.25 Time=1.30285
+Threads=64 PopulationSize=250 maxNumIterations=1000 Fitness=634.505 Time=1.44451
+Threads=1 PopulationSize=250 maxNumIterations=2500 Fitness=550.174 Time=3.61086
+Threads=2 PopulationSize=250 maxNumIterations=2500 Fitness=549.037 Time=2.13406
+Threads=3 PopulationSize=250 maxNumIterations=2500 Fitness=547.411 Time=2.56517
+Threads=4 PopulationSize=250 maxNumIterations=2500 Fitness=544.693 Time=2.14152
+Threads=6 PopulationSize=250 maxNumIterations=2500 Fitness=546.67 Time=2.4357
+Threads=8 PopulationSize=250 maxNumIterations=2500 Fitness=544.941 Time=2.55534
+Threads=16 PopulationSize=250 maxNumIterations=2500 Fitness=550.93 Time=2.9187
+Threads=32 PopulationSize=250 maxNumIterations=2500 Fitness=540.963 Time=3.24928
+Threads=64 PopulationSize=250 maxNumIterations=2500 Fitness=548.121 Time=3.58869
+Threads=1 PopulationSize=500 maxNumIterations=250 Fitness=819.617 Time=0.718377
+Threads=2 PopulationSize=500 maxNumIterations=250 Fitness=812.062 Time=0.449698
+Threads=3 PopulationSize=500 maxNumIterations=250 Fitness=808.025 Time=0.511294
+Threads=4 PopulationSize=500 maxNumIterations=250 Fitness=814.557 Time=0.435141
+Threads=6 PopulationSize=500 maxNumIterations=250 Fitness=823.938 Time=0.484965
+Threads=8 PopulationSize=500 maxNumIterations=250 Fitness=818.29 Time=0.489434
+Threads=16 PopulationSize=500 maxNumIterations=250 Fitness=827.163 Time=0.551564
+Threads=32 PopulationSize=500 maxNumIterations=250 Fitness=816.574 Time=0.588291
+Threads=64 PopulationSize=500 maxNumIterations=250 Fitness=824.927 Time=0.634845
+Threads=1 PopulationSize=500 maxNumIterations=500 Fitness=711.482 Time=1.43983
+Threads=2 PopulationSize=500 maxNumIterations=500 Fitness=721.992 Time=0.854958
+Threads=3 PopulationSize=500 maxNumIterations=500 Fitness=709.132 Time=1.06355
+Threads=4 PopulationSize=500 maxNumIterations=500 Fitness=716.125 Time=0.940427
+Threads=6 PopulationSize=500 maxNumIterations=500 Fitness=716.144 Time=1.04948
+Threads=8 PopulationSize=500 maxNumIterations=500 Fitness=718.316 Time=0.974647
+Threads=16 PopulationSize=500 maxNumIterations=500 Fitness=715.517 Time=1.08593
+Threads=32 PopulationSize=500 maxNumIterations=500 Fitness=710.732 Time=1.16825
+Threads=64 PopulationSize=500 maxNumIterations=500 Fitness=714.363 Time=1.26237
+Threads=1 PopulationSize=500 maxNumIterations=750 Fitness=661.334 Time=2.15198
+Threads=2 PopulationSize=500 maxNumIterations=750 Fitness=664.517 Time=1.38024
+Threads=3 PopulationSize=500 maxNumIterations=750 Fitness=660.351 Time=1.52042
+Threads=4 PopulationSize=500 maxNumIterations=750 Fitness=657.453 Time=1.28347
+Threads=6 PopulationSize=500 maxNumIterations=750 Fitness=668.283 Time=1.43824
+Threads=8 PopulationSize=500 maxNumIterations=750 Fitness=657.188 Time=1.45556
+Threads=16 PopulationSize=500 maxNumIterations=750 Fitness=649.974 Time=1.63225
+Threads=32 PopulationSize=500 maxNumIterations=750 Fitness=655.326 Time=1.74815
+Threads=64 PopulationSize=500 maxNumIterations=750 Fitness=655.178 Time=1.89008
+Threads=1 PopulationSize=500 maxNumIterations=1000 Fitness=628.945 Time=2.88763
+Threads=2 PopulationSize=500 maxNumIterations=1000 Fitness=628.275 Time=1.70129
+Threads=3 PopulationSize=500 maxNumIterations=1000 Fitness=626.036 Time=2.00441
+Threads=4 PopulationSize=500 maxNumIterations=1000 Fitness=620.898 Time=1.70901
+Threads=6 PopulationSize=500 maxNumIterations=1000 Fitness=621.671 Time=1.92293
+Threads=8 PopulationSize=500 maxNumIterations=1000 Fitness=618.39 Time=1.93534
+Threads=16 PopulationSize=500 maxNumIterations=1000 Fitness=614.093 Time=2.17226
+Threads=32 PopulationSize=500 maxNumIterations=1000 Fitness=626.632 Time=2.33124
+Threads=64 PopulationSize=500 maxNumIterations=1000 Fitness=621.73 Time=2.52668
+Threads=1 PopulationSize=500 maxNumIterations=2500 Fitness=543.054 Time=7.1684
+Threads=2 PopulationSize=500 maxNumIterations=2500 Fitness=542.318 Time=4.29162
+Threads=3 PopulationSize=500 maxNumIterations=2500 Fitness=541.607 Time=5.02162
+Threads=4 PopulationSize=500 maxNumIterations=2500 Fitness=536.113 Time=4.32392
+Threads=6 PopulationSize=500 maxNumIterations=2500 Fitness=537.246 Time=4.80244
+Threads=8 PopulationSize=500 maxNumIterations=2500 Fitness=540.366 Time=4.82662
+Threads=16 PopulationSize=500 maxNumIterations=2500 Fitness=539.304 Time=5.42181
+Threads=32 PopulationSize=500 maxNumIterations=2500 Fitness=540.724 Time=5.81617
+Threads=64 PopulationSize=500 maxNumIterations=2500 Fitness=535.333 Time=6.28809
+Threads=1 PopulationSize=750 maxNumIterations=250 Fitness=807.098 Time=1.07748
+Threads=2 PopulationSize=750 maxNumIterations=250 Fitness=822.663 Time=0.646325
+Threads=3 PopulationSize=750 maxNumIterations=250 Fitness=814.101 Time=0.753612
+Threads=4 PopulationSize=750 maxNumIterations=250 Fitness=813.725 Time=0.630205
+Threads=6 PopulationSize=750 maxNumIterations=250 Fitness=807.702 Time=0.717982
+Threads=8 PopulationSize=750 maxNumIterations=250 Fitness=808.262 Time=0.720271
+Threads=16 PopulationSize=750 maxNumIterations=250 Fitness=805.606 Time=0.802997
+Threads=32 PopulationSize=750 maxNumIterations=250 Fitness=804.823 Time=0.852952
+Threads=64 PopulationSize=750 maxNumIterations=250 Fitness=811.249 Time=0.911369
+Threads=1 PopulationSize=750 maxNumIterations=500 Fitness=704.135 Time=2.16151
+Threads=2 PopulationSize=750 maxNumIterations=500 Fitness=704.196 Time=1.27866
+Threads=3 PopulationSize=750 maxNumIterations=500 Fitness=703.806 Time=1.49708
+Threads=4 PopulationSize=750 maxNumIterations=500 Fitness=715.715 Time=1.28961
+Threads=6 PopulationSize=750 maxNumIterations=500 Fitness=706.336 Time=1.42497
+Threads=8 PopulationSize=750 maxNumIterations=500 Fitness=706.474 Time=1.4228
+Threads=16 PopulationSize=750 maxNumIterations=500 Fitness=708.825 Time=1.60484
+Threads=32 PopulationSize=750 maxNumIterations=500 Fitness=710.921 Time=1.71771
+Threads=64 PopulationSize=750 maxNumIterations=500 Fitness=699.991 Time=1.8108
+Threads=1 PopulationSize=750 maxNumIterations=750 Fitness=655.313 Time=3.22003
+Threads=2 PopulationSize=750 maxNumIterations=750 Fitness=647.813 Time=1.93604
+Threads=3 PopulationSize=750 maxNumIterations=750 Fitness=651.232 Time=2.26618
+Threads=4 PopulationSize=750 maxNumIterations=750 Fitness=650.37 Time=1.93592
+Threads=6 PopulationSize=750 maxNumIterations=750 Fitness=648.258 Time=2.14107
+Threads=8 PopulationSize=750 maxNumIterations=750 Fitness=661.265 Time=2.1267
+Threads=16 PopulationSize=750 maxNumIterations=750 Fitness=645.155 Time=2.40635
+Threads=32 PopulationSize=750 maxNumIterations=750 Fitness=649.805 Time=2.56749
+Threads=64 PopulationSize=750 maxNumIterations=750 Fitness=647.477 Time=2.71428
+Threads=1 PopulationSize=750 maxNumIterations=1000 Fitness=622.342 Time=4.28639
+Threads=2 PopulationSize=750 maxNumIterations=1000 Fitness=624.359 Time=2.62155
+Threads=3 PopulationSize=750 maxNumIterations=1000 Fitness=615.214 Time=3.04982
+Threads=4 PopulationSize=750 maxNumIterations=1000 Fitness=621.111 Time=2.54692
+Threads=6 PopulationSize=750 maxNumIterations=1000 Fitness=619.539 Time=2.84014
+Threads=8 PopulationSize=750 maxNumIterations=1000 Fitness=619.947 Time=2.84167
+Threads=16 PopulationSize=750 maxNumIterations=1000 Fitness=617.622 Time=3.19311
+Threads=32 PopulationSize=750 maxNumIterations=1000 Fitness=622.193 Time=3.42929
+Threads=64 PopulationSize=750 maxNumIterations=1000 Fitness=620.496 Time=3.60975
+Threads=1 PopulationSize=750 maxNumIterations=2500 Fitness=541.551 Time=10.7305
+Threads=2 PopulationSize=750 maxNumIterations=2500 Fitness=534.03 Time=6.47241
+Threads=3 PopulationSize=750 maxNumIterations=2500 Fitness=534.652 Time=7.70051
+Threads=4 PopulationSize=750 maxNumIterations=2500 Fitness=536.269 Time=6.37673
+Threads=6 PopulationSize=750 maxNumIterations=2500 Fitness=537.925 Time=7.10758
+Threads=8 PopulationSize=750 maxNumIterations=2500 Fitness=537.571 Time=7.08704
+Threads=16 PopulationSize=750 maxNumIterations=2500 Fitness=533.754 Time=7.9806
+Threads=32 PopulationSize=750 maxNumIterations=2500 Fitness=532.422 Time=8.53042
+Threads=64 PopulationSize=750 maxNumIterations=2500 Fitness=530.39 Time=9.03866
+Threads=1 PopulationSize=1000 maxNumIterations=250 Fitness=799.831 Time=1.45007
+Threads=2 PopulationSize=1000 maxNumIterations=250 Fitness=811.317 Time=0.863998
+Threads=3 PopulationSize=1000 maxNumIterations=250 Fitness=812.886 Time=1.01573
+Threads=4 PopulationSize=1000 maxNumIterations=250 Fitness=800.452 Time=0.849037
+Threads=6 PopulationSize=1000 maxNumIterations=250 Fitness=809.03 Time=0.953101
+Threads=8 PopulationSize=1000 maxNumIterations=250 Fitness=805.832 Time=0.944965
+Threads=16 PopulationSize=1000 maxNumIterations=250 Fitness=807.127 Time=1.05863
+Threads=32 PopulationSize=1000 maxNumIterations=250 Fitness=800.163 Time=1.11995
+Threads=64 PopulationSize=1000 maxNumIterations=250 Fitness=806.098 Time=1.1721
+Threads=1 PopulationSize=1000 maxNumIterations=500 Fitness=704.205 Time=2.87005
+Threads=2 PopulationSize=1000 maxNumIterations=500 Fitness=707.265 Time=1.70433
+Threads=3 PopulationSize=1000 maxNumIterations=500 Fitness=693.401 Time=2.0384
+Threads=4 PopulationSize=1000 maxNumIterations=500 Fitness=711.015 Time=1.69563
+Threads=6 PopulationSize=1000 maxNumIterations=500 Fitness=702.123 Time=1.88951
+Threads=8 PopulationSize=1000 maxNumIterations=500 Fitness=709.014 Time=1.87911
+Threads=16 PopulationSize=1000 maxNumIterations=500 Fitness=698.845 Time=2.10901
+Threads=32 PopulationSize=1000 maxNumIterations=500 Fitness=711.936 Time=2.20857
+Threads=64 PopulationSize=1000 maxNumIterations=500 Fitness=708.349 Time=2.32572
+Threads=1 PopulationSize=1000 maxNumIterations=750 Fitness=648.772 Time=4.32594
+Threads=2 PopulationSize=1000 maxNumIterations=750 Fitness=652.834 Time=2.54608
+Threads=3 PopulationSize=1000 maxNumIterations=750 Fitness=654.208 Time=3.00308
+Threads=4 PopulationSize=1000 maxNumIterations=750 Fitness=654.047 Time=2.5651
+Threads=6 PopulationSize=1000 maxNumIterations=750 Fitness=652.521 Time=2.82542
+Threads=8 PopulationSize=1000 maxNumIterations=750 Fitness=652.92 Time=2.80727
+Threads=16 PopulationSize=1000 maxNumIterations=750 Fitness=654.024 Time=3.14647
+Threads=32 PopulationSize=1000 maxNumIterations=750 Fitness=651.008 Time=3.32183
+Threads=64 PopulationSize=1000 maxNumIterations=750 Fitness=653.484 Time=3.49822
+Threads=1 PopulationSize=1000 maxNumIterations=1000 Fitness=619.177 Time=5.73221
+Threads=2 PopulationSize=1000 maxNumIterations=1000 Fitness=614.395 Time=3.41403
+Threads=3 PopulationSize=1000 maxNumIterations=1000 Fitness=620.462 Time=3.99753
+Threads=4 PopulationSize=1000 maxNumIterations=1000 Fitness=618.299 Time=3.39603
+Threads=6 PopulationSize=1000 maxNumIterations=1000 Fitness=619.017 Time=3.76111
+Threads=8 PopulationSize=1000 maxNumIterations=1000 Fitness=610.018 Time=3.73611
+Threads=16 PopulationSize=1000 maxNumIterations=1000 Fitness=626.758 Time=4.20342
+Threads=32 PopulationSize=1000 maxNumIterations=1000 Fitness=619.412 Time=4.43401
+Threads=64 PopulationSize=1000 maxNumIterations=1000 Fitness=616.386 Time=4.68452
+Threads=1 PopulationSize=1000 maxNumIterations=2500 Fitness=528.552 Time=14.3359
+Threads=2 PopulationSize=1000 maxNumIterations=2500 Fitness=530.909 Time=8.58639
+Threads=3 PopulationSize=1000 maxNumIterations=2500 Fitness=538.24 Time=10.1439
+Threads=4 PopulationSize=1000 maxNumIterations=2500 Fitness=525.981 Time=9.31043
+Threads=6 PopulationSize=1000 maxNumIterations=2500 Fitness=530.385 Time=9.39491
+Threads=8 PopulationSize=1000 maxNumIterations=2500 Fitness=532.325 Time=9.32371
+Threads=16 PopulationSize=1000 maxNumIterations=2500 Fitness=529.306 Time=10.4666
+Threads=32 PopulationSize=1000 maxNumIterations=2500 Fitness=533.557 Time=11.0171
+Threads=64 PopulationSize=1000 maxNumIterations=2500 Fitness=533.51 Time=11.651
+Threads=1 PopulationSize=2500 maxNumIterations=250 Fitness=791.146 Time=3.58522
+Threads=2 PopulationSize=2500 maxNumIterations=250 Fitness=793.539 Time=2.20003
+Threads=3 PopulationSize=2500 maxNumIterations=250 Fitness=793.448 Time=2.48342
+Threads=4 PopulationSize=2500 maxNumIterations=250 Fitness=796.287 Time=2.12339
+Threads=6 PopulationSize=2500 maxNumIterations=250 Fitness=783.562 Time=2.3076
+Threads=8 PopulationSize=2500 maxNumIterations=250 Fitness=798.85 Time=2.29503
+Threads=16 PopulationSize=2500 maxNumIterations=250 Fitness=795.157 Time=2.42277
+Threads=32 PopulationSize=2500 maxNumIterations=250 Fitness=781.234 Time=2.49603
+Threads=64 PopulationSize=2500 maxNumIterations=250 Fitness=797.2 Time=2.51118
+Threads=1 PopulationSize=2500 maxNumIterations=500 Fitness=688.107 Time=7.1876
+Threads=2 PopulationSize=2500 maxNumIterations=500 Fitness=692.238 Time=4.25456
+Threads=3 PopulationSize=2500 maxNumIterations=500 Fitness=694.565 Time=4.9407
+Threads=4 PopulationSize=2500 maxNumIterations=500 Fitness=693.252 Time=4.24132
+Threads=6 PopulationSize=2500 maxNumIterations=500 Fitness=691.392 Time=4.58952
+Threads=8 PopulationSize=2500 maxNumIterations=500 Fitness=686.529 Time=4.57516
+Threads=16 PopulationSize=2500 maxNumIterations=500 Fitness=696.601 Time=4.81442
+Threads=32 PopulationSize=2500 maxNumIterations=500 Fitness=692.939 Time=4.95228
+Threads=64 PopulationSize=2500 maxNumIterations=500 Fitness=699.996 Time=5.00583
+Threads=1 PopulationSize=2500 maxNumIterations=750 Fitness=643.704 Time=10.7074
+Threads=2 PopulationSize=2500 maxNumIterations=750 Fitness=642.426 Time=6.38488
+Threads=3 PopulationSize=2500 maxNumIterations=750 Fitness=638.105 Time=7.39764
+Threads=4 PopulationSize=2500 maxNumIterations=750 Fitness=637.129 Time=6.33841
+Threads=6 PopulationSize=2500 maxNumIterations=750 Fitness=643.259 Time=6.87879
+Threads=8 PopulationSize=2500 maxNumIterations=750 Fitness=645.901 Time=6.83356
+Threads=16 PopulationSize=2500 maxNumIterations=750 Fitness=638.952 Time=7.23111
+Threads=32 PopulationSize=2500 maxNumIterations=750 Fitness=641.072 Time=7.67448
+Threads=64 PopulationSize=2500 maxNumIterations=750 Fitness=642.97 Time=7.47524
+Threads=1 PopulationSize=2500 maxNumIterations=1000 Fitness=610.969 Time=14.316
+Threads=2 PopulationSize=2500 maxNumIterations=1000 Fitness=602.956 Time=8.58881
+Threads=3 PopulationSize=2500 maxNumIterations=1000 Fitness=605.422 Time=9.89802
+Threads=4 PopulationSize=2500 maxNumIterations=1000 Fitness=604.899 Time=8.38142
+Threads=6 PopulationSize=2500 maxNumIterations=1000 Fitness=613.052 Time=9.15201
+Threads=8 PopulationSize=2500 maxNumIterations=1000 Fitness=606.806 Time=9.1072
+Threads=16 PopulationSize=2500 maxNumIterations=1000 Fitness=606.179 Time=9.5632
+Threads=32 PopulationSize=2500 maxNumIterations=1000 Fitness=609.072 Time=9.84514
+Threads=64 PopulationSize=2500 maxNumIterations=1000 Fitness=609.013 Time=10.4464
+Threads=1 PopulationSize=2500 maxNumIterations=2500 Fitness=520.962 Time=36.1429
+Threads=2 PopulationSize=2500 maxNumIterations=2500 Fitness=524.641 Time=21.3234
+Threads=3 PopulationSize=2500 maxNumIterations=2500 Fitness=524.221 Time=24.8741
+Threads=4 PopulationSize=2500 maxNumIterations=2500 Fitness=527.163 Time=21.0753
+Threads=6 PopulationSize=2500 maxNumIterations=2500 Fitness=524.387 Time=22.8076
+Threads=8 PopulationSize=2500 maxNumIterations=2500 Fitness=526.355 Time=22.6659
+Threads=16 PopulationSize=2500 maxNumIterations=2500 Fitness=521.57 Time=23.832
+Threads=32 PopulationSize=2500 maxNumIterations=2500 Fitness=522.277 Time=24.5215
+Threads=64 PopulationSize=2500 maxNumIterations=2500 Fitness=520.354 Time=25.129
 
-PopulationSize=100 maxNumIterations=100 Fitness=1003.84 Time=0.0362115
-PopulationSize=100 maxNumIterations=200 Fitness=885.472 Time=0.0697153
-PopulationSize=100 maxNumIterations=300 Fitness=810.234 Time=0.10538
-PopulationSize=100 maxNumIterations=400 Fitness=765.987 Time=0.140573
-PopulationSize=100 maxNumIterations=500 Fitness=737.545 Time=0.175368
-PopulationSize=100 maxNumIterations=600 Fitness=712.19 Time=0.209136
-PopulationSize=100 maxNumIterations=700 Fitness=688.094 Time=0.243928
-PopulationSize=100 maxNumIterations=800 Fitness=671.372 Time=0.2775
-PopulationSize=100 maxNumIterations=900 Fitness=662.667 Time=0.313015
-PopulationSize=100 maxNumIterations=1000 Fitness=633.387 Time=0.353189
-PopulationSize=100 maxNumIterations=2000 Fitness=575.679 Time=0.697184
-PopulationSize=100 maxNumIterations=3000 Fitness=539.347 Time=1.04379
-PopulationSize=100 maxNumIterations=4000 Fitness=524.03 Time=1.40013
-PopulationSize=100 maxNumIterations=5000 Fitness=510.585 Time=1.74719
-PopulationSize=100 maxNumIterations=6000 Fitness=507.043 Time=2.09527
-PopulationSize=100 maxNumIterations=7000 Fitness=498.536 Time=2.47446
-PopulationSize=100 maxNumIterations=8000 Fitness=498.93 Time=2.8139
-PopulationSize=100 maxNumIterations=9000 Fitness=498.2 Time=3.24105
-PopulationSize=100 maxNumIterations=10000 Fitness=497.364 Time=3.51496
+
+
+
+
+Threads=1 PopulationSize=500 maxNumIterations=10000 Fitness=480.492 Time=28.9301
+Threads=2 PopulationSize=500 maxNumIterations=10000 Fitness=481.042 Time=17.08
+Threads=3 PopulationSize=500 maxNumIterations=10000 Fitness=486.164 Time=19.4246
+Threads=4 PopulationSize=500 maxNumIterations=10000 Fitness=481.419 Time=16.1616
+Threads=6 PopulationSize=500 maxNumIterations=10000 Fitness=478.596 Time=18.4624
+Threads=8 PopulationSize=500 maxNumIterations=10000 Fitness=484.597 Time=18.7737
+Threads=16 PopulationSize=500 maxNumIterations=10000 Fitness=484.133 Time=19.2235
+Threads=32 PopulationSize=500 maxNumIterations=10000 Fitness=485.378 Time=20.5241
+Threads=64 PopulationSize=500 maxNumIterations=10000 Fitness=480.417 Time=20.9859
+
+
+
+\subsection{Debondt}
+Threads=1 PopulationSize=250 maxNumIterations=250 Fitness=825.873 Time=0.498614
+Threads=2 PopulationSize=250 maxNumIterations=250 Fitness=827.798 Time=0.256734
+Threads=3 PopulationSize=250 maxNumIterations=250 Fitness=833.218 Time=0.234594
+Threads=4 PopulationSize=250 maxNumIterations=250 Fitness=829.502 Time=0.25028
+Threads=6 PopulationSize=250 maxNumIterations=250 Fitness=833.725 Time=0.14502
+Threads=8 PopulationSize=250 maxNumIterations=250 Fitness=834.187 Time=0.123363
+Threads=12 PopulationSize=250 maxNumIterations=250 Fitness=824.89 Time=0.0911704
+Threads=16 PopulationSize=250 maxNumIterations=250 Fitness=831.132 Time=0.0969198
+Threads=24 PopulationSize=250 maxNumIterations=250 Fitness=821.164 Time=1.44461
+Threads=32 PopulationSize=250 maxNumIterations=250 Fitness=829.922 Time=0.230442
+Threads=64 PopulationSize=250 maxNumIterations=250 Fitness=825.526 Time=0.290902
+Threads=1 PopulationSize=250 maxNumIterations=500 Fitness=732.205 Time=0.976967
+Threads=2 PopulationSize=250 maxNumIterations=500 Fitness=720.668 Time=0.51108
+Threads=3 PopulationSize=250 maxNumIterations=500 Fitness=725.131 Time=0.495569
+Threads=4 PopulationSize=250 maxNumIterations=500 Fitness=736.251 Time=0.282616
+Threads=6 PopulationSize=250 maxNumIterations=500 Fitness=719.291 Time=0.287349
+Threads=8 PopulationSize=250 maxNumIterations=500 Fitness=729.936 Time=0.228626
+Threads=12 PopulationSize=250 maxNumIterations=500 Fitness=714.331 Time=0.193496
+Threads=16 PopulationSize=250 maxNumIterations=500 Fitness=733.439 Time=0.208896
+Threads=24 PopulationSize=250 maxNumIterations=500 Fitness=718.369 Time=2.99166
+Threads=32 PopulationSize=250 maxNumIterations=500 Fitness=725.085 Time=0.41896
+Threads=64 PopulationSize=250 maxNumIterations=500 Fitness=737.753 Time=0.560216
+Threads=1 PopulationSize=250 maxNumIterations=750 Fitness=673.247 Time=1.48522
+Threads=2 PopulationSize=250 maxNumIterations=750 Fitness=661.525 Time=1.16995
+Threads=3 PopulationSize=250 maxNumIterations=750 Fitness=671.701 Time=0.584954
+Threads=4 PopulationSize=250 maxNumIterations=750 Fitness=671.776 Time=0.491961
+Threads=6 PopulationSize=250 maxNumIterations=750 Fitness=670.713 Time=0.393863
+Threads=8 PopulationSize=250 maxNumIterations=750 Fitness=664.038 Time=0.358989
+Threads=12 PopulationSize=250 maxNumIterations=750 Fitness=663.441 Time=0.308624
+Threads=16 PopulationSize=250 maxNumIterations=750 Fitness=665.429 Time=0.275354
+Threads=24 PopulationSize=250 maxNumIterations=750 Fitness=667.481 Time=4.27817
+Threads=32 PopulationSize=250 maxNumIterations=750 Fitness=667.874 Time=0.684404
+Threads=64 PopulationSize=250 maxNumIterations=750 Fitness=668.94 Time=0.914805
+Threads=1 PopulationSize=250 maxNumIterations=1000 Fitness=634.439 Time=1.95726
+Threads=2 PopulationSize=250 maxNumIterations=1000 Fitness=628.266 Time=1.07001
+Threads=3 PopulationSize=250 maxNumIterations=1000 Fitness=637.039 Time=1.07175
+Threads=4 PopulationSize=250 maxNumIterations=1000 Fitness=639.149 Time=0.772146
+Threads=6 PopulationSize=250 maxNumIterations=1000 Fitness=639.049 Time=0.580793
+Threads=8 PopulationSize=250 maxNumIterations=1000 Fitness=622.91 Time=0.471528
+Threads=12 PopulationSize=250 maxNumIterations=1000 Fitness=635.63 Time=0.431076
+Threads=16 PopulationSize=250 maxNumIterations=1000 Fitness=640.588 Time=0.406063
+Threads=24 PopulationSize=250 maxNumIterations=1000 Fitness=627.816 Time=5.65926
+Threads=32 PopulationSize=250 maxNumIterations=1000 Fitness=643.026 Time=0.958368
+Threads=64 PopulationSize=250 maxNumIterations=1000 Fitness=633.299 Time=1.20987
+Threads=1 PopulationSize=250 maxNumIterations=2500 Fitness=540.788 Time=4.60454
+Threads=2 PopulationSize=250 maxNumIterations=2500 Fitness=546.133 Time=2.42005
+Threads=3 PopulationSize=250 maxNumIterations=2500 Fitness=538.92 Time=2.19057
+Threads=4 PopulationSize=250 maxNumIterations=2500 Fitness=547.037 Time=1.34767
+Threads=6 PopulationSize=250 maxNumIterations=2500 Fitness=542.733 Time=1.42351
+Threads=8 PopulationSize=250 maxNumIterations=2500 Fitness=546.762 Time=1.11722
+Threads=12 PopulationSize=250 maxNumIterations=2500 Fitness=543.109 Time=1.03887
+Threads=16 PopulationSize=250 maxNumIterations=2500 Fitness=543.872 Time=1.02502
+Threads=24 PopulationSize=250 maxNumIterations=2500 Fitness=548.111 Time=14.9455
+Threads=32 PopulationSize=250 maxNumIterations=2500 Fitness=541.566 Time=2.04745
+Threads=64 PopulationSize=250 maxNumIterations=2500 Fitness=543.896 Time=2.89866
+Threads=1 PopulationSize=500 maxNumIterations=250 Fitness=815.646 Time=0.997845
+Threads=2 PopulationSize=500 maxNumIterations=250 Fitness=821.907 Time=0.529934
+Threads=3 PopulationSize=500 maxNumIterations=250 Fitness=807.769 Time=0.433316
+Threads=4 PopulationSize=500 maxNumIterations=250 Fitness=811.497 Time=0.294757
+Threads=6 PopulationSize=500 maxNumIterations=250 Fitness=813.348 Time=0.264472
+Threads=8 PopulationSize=500 maxNumIterations=250 Fitness=819.785 Time=0.232431
+Threads=12 PopulationSize=500 maxNumIterations=250 Fitness=821.842 Time=0.220541
+Threads=16 PopulationSize=500 maxNumIterations=250 Fitness=817.686 Time=0.21821
+Threads=24 PopulationSize=500 maxNumIterations=250 Fitness=817.675 Time=1.9726
+Threads=32 PopulationSize=500 maxNumIterations=250 Fitness=809.839 Time=0.274228
+Threads=64 PopulationSize=500 maxNumIterations=250 Fitness=805.517 Time=0.446451
+Threads=1 PopulationSize=500 maxNumIterations=500 Fitness=710.012 Time=1.9829
+Threads=2 PopulationSize=500 maxNumIterations=500 Fitness=717.876 Time=1.27032
+Threads=3 PopulationSize=500 maxNumIterations=500 Fitness=708.829 Time=0.834943
+Threads=4 PopulationSize=500 maxNumIterations=500 Fitness=701.761 Time=0.61606
+Threads=6 PopulationSize=500 maxNumIterations=500 Fitness=713.854 Time=0.563754
+Threads=8 PopulationSize=500 maxNumIterations=500 Fitness=714.369 Time=0.483167
+Threads=12 PopulationSize=500 maxNumIterations=500 Fitness=707.627 Time=0.452533
+Threads=16 PopulationSize=500 maxNumIterations=500 Fitness=713.738 Time=0.419937
+Threads=24 PopulationSize=500 maxNumIterations=500 Fitness=714.379 Time=3.92984
+Threads=32 PopulationSize=500 maxNumIterations=500 Fitness=717.649 Time=0.543028
+Threads=64 PopulationSize=500 maxNumIterations=500 Fitness=716.72 Time=0.874008
+Threads=1 PopulationSize=500 maxNumIterations=750 Fitness=658.707 Time=2.85553
+Threads=2 PopulationSize=500 maxNumIterations=750 Fitness=661.871 Time=2.26378
+Threads=3 PopulationSize=500 maxNumIterations=750 Fitness=658.009 Time=1.26752
+Threads=4 PopulationSize=500 maxNumIterations=750 Fitness=665.311 Time=0.930655
+Threads=6 PopulationSize=500 maxNumIterations=750 Fitness=661.292 Time=0.791409
+Threads=8 PopulationSize=500 maxNumIterations=750 Fitness=664.514 Time=0.715707
+Threads=12 PopulationSize=500 maxNumIterations=750 Fitness=663.074 Time=0.622155
+Threads=16 PopulationSize=500 maxNumIterations=750 Fitness=647.106 Time=0.627138
+Threads=24 PopulationSize=500 maxNumIterations=750 Fitness=655.385 Time=5.93567
+Threads=32 PopulationSize=500 maxNumIterations=750 Fitness=658.668 Time=1.14117
+Threads=64 PopulationSize=500 maxNumIterations=750 Fitness=653.72 Time=1.54579
+Threads=1 PopulationSize=500 maxNumIterations=1000 Fitness=627.93 Time=3.72409
+Threads=2 PopulationSize=500 maxNumIterations=1000 Fitness=619.968 Time=2.02395
+Threads=3 PopulationSize=500 maxNumIterations=1000 Fitness=617.355 Time=1.46262
+Threads=4 PopulationSize=500 maxNumIterations=1000 Fitness=614.791 Time=1.38167
+Threads=6 PopulationSize=500 maxNumIterations=1000 Fitness=626.294 Time=0.984361
+Threads=8 PopulationSize=500 maxNumIterations=1000 Fitness=622.216 Time=0.957052
+Threads=12 PopulationSize=500 maxNumIterations=1000 Fitness=624.377 Time=0.796568
+Threads=16 PopulationSize=500 maxNumIterations=1000 Fitness=619.615 Time=0.807839
+Threads=24 PopulationSize=500 maxNumIterations=1000 Fitness=627.087 Time=7.84777
+Threads=32 PopulationSize=500 maxNumIterations=1000 Fitness=624.323 Time=1.49487
+Threads=64 PopulationSize=500 maxNumIterations=1000 Fitness=621.661 Time=2.10215
+Threads=1 PopulationSize=500 maxNumIterations=2500 Fitness=534.899 Time=8.81162
+Threads=2 PopulationSize=500 maxNumIterations=2500 Fitness=536.075 Time=4.62639
+Threads=3 PopulationSize=500 maxNumIterations=2500 Fitness=539.948 Time=3.51386
+Threads=4 PopulationSize=500 maxNumIterations=2500 Fitness=537.637 Time=2.8107
+Threads=6 PopulationSize=500 maxNumIterations=2500 Fitness=534.47 Time=2.42449
+Threads=8 PopulationSize=500 maxNumIterations=2500 Fitness=538.693 Time=2.3438
+Threads=12 PopulationSize=500 maxNumIterations=2500 Fitness=539.72 Time=1.95653
+Threads=16 PopulationSize=500 maxNumIterations=2500 Fitness=540.116 Time=2.15609
+Threads=24 PopulationSize=500 maxNumIterations=2500 Fitness=534.812 Time=19.4074
+Threads=32 PopulationSize=500 maxNumIterations=2500 Fitness=544.481 Time=3.1424
+Threads=64 PopulationSize=500 maxNumIterations=2500 Fitness=540.213 Time=5.33737
+Threads=1 PopulationSize=750 maxNumIterations=250 Fitness=814.253 Time=1.48452
+Threads=2 PopulationSize=750 maxNumIterations=250 Fitness=811.138 Time=0.830623
+Threads=3 PopulationSize=750 maxNumIterations=250 Fitness=808.757 Time=0.599819
+Threads=4 PopulationSize=750 maxNumIterations=250 Fitness=808.13 Time=0.467568
+Threads=6 PopulationSize=750 maxNumIterations=250 Fitness=810.941 Time=0.415872
+Threads=8 PopulationSize=750 maxNumIterations=250 Fitness=816.001 Time=0.348168
+Threads=12 PopulationSize=750 maxNumIterations=250 Fitness=819.584 Time=0.320256
+Threads=16 PopulationSize=750 maxNumIterations=250 Fitness=815.363 Time=0.322424
+Threads=24 PopulationSize=750 maxNumIterations=250 Fitness=805.524 Time=2.12901
+Threads=32 PopulationSize=750 maxNumIterations=250 Fitness=816.228 Time=0.546813
+Threads=64 PopulationSize=750 maxNumIterations=250 Fitness=803.143 Time=0.693883
+Threads=1 PopulationSize=750 maxNumIterations=500 Fitness=708.2 Time=2.90377
+Threads=2 PopulationSize=750 maxNumIterations=500 Fitness=707.366 Time=1.53973
+Threads=3 PopulationSize=750 maxNumIterations=500 Fitness=709.149 Time=1.14781
+Threads=4 PopulationSize=750 maxNumIterations=500 Fitness=711.116 Time=1.22375
+Threads=6 PopulationSize=750 maxNumIterations=500 Fitness=711.173 Time=0.76557
+Threads=8 PopulationSize=750 maxNumIterations=500 Fitness=714.224 Time=0.740153
+Threads=12 PopulationSize=750 maxNumIterations=500 Fitness=711.747 Time=0.65097
+Threads=16 PopulationSize=750 maxNumIterations=500 Fitness=710.132 Time=0.683477
+Threads=24 PopulationSize=750 maxNumIterations=500 Fitness=705.891 Time=4.29082
+Threads=32 PopulationSize=750 maxNumIterations=500 Fitness=703.323 Time=0.968908
+Threads=64 PopulationSize=750 maxNumIterations=500 Fitness=713.547 Time=1.36155
+Threads=1 PopulationSize=750 maxNumIterations=750 Fitness=656.313 Time=4.14403
+Threads=2 PopulationSize=750 maxNumIterations=750 Fitness=654.908 Time=2.38531
+Threads=3 PopulationSize=750 maxNumIterations=750 Fitness=652.866 Time=2.11833
+Threads=4 PopulationSize=750 maxNumIterations=750 Fitness=663.477 Time=1.27253
+Threads=6 PopulationSize=750 maxNumIterations=750 Fitness=655.127 Time=1.18064
+Threads=8 PopulationSize=750 maxNumIterations=750 Fitness=660.674 Time=1.00979
+Threads=12 PopulationSize=750 maxNumIterations=750 Fitness=647.557 Time=0.987182
+Threads=16 PopulationSize=750 maxNumIterations=750 Fitness=648.433 Time=1.10953
+Threads=24 PopulationSize=750 maxNumIterations=750 Fitness=653.679 Time=6.40896
+Threads=32 PopulationSize=750 maxNumIterations=750 Fitness=651.427 Time=1.51869
+Threads=64 PopulationSize=750 maxNumIterations=750 Fitness=649.998 Time=2.15205
+Threads=1 PopulationSize=750 maxNumIterations=1000 Fitness=619.054 Time=5.42863
+Threads=2 PopulationSize=750 maxNumIterations=1000 Fitness=611.864 Time=3.51419
+Threads=3 PopulationSize=750 maxNumIterations=1000 Fitness=619.302 Time=2.36065
+Threads=4 PopulationSize=750 maxNumIterations=1000 Fitness=608.388 Time=1.77419
+Threads=6 PopulationSize=750 maxNumIterations=1000 Fitness=623.521 Time=1.39816
+Threads=8 PopulationSize=750 maxNumIterations=1000 Fitness=618.714 Time=1.39342
+Threads=12 PopulationSize=750 maxNumIterations=1000 Fitness=621.893 Time=1.27276
+Threads=16 PopulationSize=750 maxNumIterations=1000 Fitness=616.341 Time=1.58204
+Threads=24 PopulationSize=750 maxNumIterations=1000 Fitness=622.711 Time=8.68905
+Threads=32 PopulationSize=750 maxNumIterations=1000 Fitness=620.01 Time=2.05916
+Threads=64 PopulationSize=750 maxNumIterations=1000 Fitness=626.752 Time=2.81202
+Threads=1 PopulationSize=750 maxNumIterations=2500 Fitness=534.485 Time=12.8188
+Threads=2 PopulationSize=750 maxNumIterations=2500 Fitness=532.1 Time=8.39131
+Threads=3 PopulationSize=750 maxNumIterations=2500 Fitness=528.846 Time=5.26154
+Threads=4 PopulationSize=750 maxNumIterations=2500 Fitness=531.979 Time=4.30223
+Threads=6 PopulationSize=750 maxNumIterations=2500 Fitness=529.369 Time=3.38918
+Threads=8 PopulationSize=750 maxNumIterations=2500 Fitness=532.373 Time=3.47054
+Threads=12 PopulationSize=750 maxNumIterations=2500 Fitness=527.372 Time=3.05013
+Threads=16 PopulationSize=750 maxNumIterations=2500 Fitness=534.339 Time=3.27493
+Threads=24 PopulationSize=750 maxNumIterations=2500 Fitness=540.302 Time=21.2422
+Threads=32 PopulationSize=750 maxNumIterations=2500 Fitness=538.236 Time=4.93104
+Threads=64 PopulationSize=750 maxNumIterations=2500 Fitness=537.012 Time=6.73461
+Threads=1 PopulationSize=1000 maxNumIterations=250 Fitness=807.169 Time=1.99196
+Threads=2 PopulationSize=1000 maxNumIterations=250 Fitness=802.716 Time=1.0424
+Threads=3 PopulationSize=1000 maxNumIterations=250 Fitness=808.5 Time=0.83093
+Threads=4 PopulationSize=1000 maxNumIterations=250 Fitness=795.303 Time=0.683043
+Threads=6 PopulationSize=1000 maxNumIterations=250 Fitness=808.068 Time=0.520272
+Threads=8 PopulationSize=1000 maxNumIterations=250 Fitness=811.789 Time=0.475079
+Threads=12 PopulationSize=1000 maxNumIterations=250 Fitness=806.496 Time=0.363512
+Threads=16 PopulationSize=1000 maxNumIterations=250 Fitness=804.435 Time=0.447039
+Threads=24 PopulationSize=1000 maxNumIterations=250 Fitness=805.788 Time=2.25497
+Threads=32 PopulationSize=1000 maxNumIterations=250 Fitness=807.973 Time=0.575873
+Threads=64 PopulationSize=1000 maxNumIterations=250 Fitness=812.892 Time=0.780898
+Threads=1 PopulationSize=1000 maxNumIterations=500 Fitness=701.246 Time=3.7168
+Threads=2 PopulationSize=1000 maxNumIterations=500 Fitness=702.142 Time=2.55916
+Threads=3 PopulationSize=1000 maxNumIterations=500 Fitness=710.854 Time=1.91198
+Threads=4 PopulationSize=1000 maxNumIterations=500 Fitness=700.689 Time=1.22631
+Threads=6 PopulationSize=1000 maxNumIterations=500 Fitness=701.807 Time=0.842672
+Threads=8 PopulationSize=1000 maxNumIterations=500 Fitness=710.956 Time=0.94768
+Threads=12 PopulationSize=1000 maxNumIterations=500 Fitness=701.555 Time=0.741116
+Threads=16 PopulationSize=1000 maxNumIterations=500 Fitness=690.885 Time=0.881337
+Threads=24 PopulationSize=1000 maxNumIterations=500 Fitness=689.091 Time=4.32029
+Threads=32 PopulationSize=1000 maxNumIterations=500 Fitness=708.15 Time=0.883211
+Threads=64 PopulationSize=1000 maxNumIterations=500 Fitness=703.802 Time=1.37574
+Threads=1 PopulationSize=1000 maxNumIterations=750 Fitness=652.363 Time=5.34287
+Threads=2 PopulationSize=1000 maxNumIterations=750 Fitness=655.609 Time=3.05948
+Threads=3 PopulationSize=1000 maxNumIterations=750 Fitness=653.789 Time=2.34432
+Threads=4 PopulationSize=1000 maxNumIterations=750 Fitness=654.652 Time=1.72198
+Threads=6 PopulationSize=1000 maxNumIterations=750 Fitness=654.726 Time=1.3357
+Threads=8 PopulationSize=1000 maxNumIterations=750 Fitness=658.72 Time=1.41575
+Threads=12 PopulationSize=1000 maxNumIterations=750 Fitness=652.939 Time=1.10295
+Threads=16 PopulationSize=1000 maxNumIterations=750 Fitness=656.735 Time=1.16414
+Threads=24 PopulationSize=1000 maxNumIterations=750 Fitness=648.498 Time=6.44569
+Threads=32 PopulationSize=1000 maxNumIterations=750 Fitness=649.733 Time=1.48515
+Threads=64 PopulationSize=1000 maxNumIterations=750 Fitness=649.782 Time=2.09054
+Threads=1 PopulationSize=1000 maxNumIterations=1000 Fitness=613.584 Time=7.08467
+Threads=2 PopulationSize=1000 maxNumIterations=1000 Fitness=609.948 Time=4.05659
+Threads=3 PopulationSize=1000 maxNumIterations=1000 Fitness=617.146 Time=2.95247
+Threads=4 PopulationSize=1000 maxNumIterations=1000 Fitness=620.773 Time=2.1521
+Threads=6 PopulationSize=1000 maxNumIterations=1000 Fitness=617.858 Time=1.61509
+Threads=8 PopulationSize=1000 maxNumIterations=1000 Fitness=621.605 Time=1.89783
+Threads=12 PopulationSize=1000 maxNumIterations=1000 Fitness=620.639 Time=1.63925
+Threads=16 PopulationSize=1000 maxNumIterations=1000 Fitness=615.915 Time=1.57121
+Threads=24 PopulationSize=1000 maxNumIterations=1000 Fitness=621.564 Time=8.56889
+Threads=32 PopulationSize=1000 maxNumIterations=1000 Fitness=614.256 Time=1.95045
+Threads=64 PopulationSize=1000 maxNumIterations=1000 Fitness=623.263 Time=2.74119
+Threads=1 PopulationSize=1000 maxNumIterations=2500 Fitness=530.315 Time=17.2288
+Threads=2 PopulationSize=1000 maxNumIterations=2500 Fitness=527.196 Time=9.43759
+Threads=3 PopulationSize=1000 maxNumIterations=2500 Fitness=530.134 Time=6.84772
+Threads=4 PopulationSize=1000 maxNumIterations=2500 Fitness=533.174 Time=5.34964
+Threads=6 PopulationSize=1000 maxNumIterations=2500 Fitness=524.36 Time=4.4299
+Threads=8 PopulationSize=1000 maxNumIterations=2500 Fitness=531.274 Time=4.5526
+Threads=12 PopulationSize=1000 maxNumIterations=2500 Fitness=535.187 Time=4.05485
+Threads=16 PopulationSize=1000 maxNumIterations=2500 Fitness=537.583 Time=3.8167
+Threads=24 PopulationSize=1000 maxNumIterations=2500 Fitness=531.166 Time=21.9847
+Threads=32 PopulationSize=1000 maxNumIterations=2500 Fitness=532.982 Time=5.60687
+Threads=64 PopulationSize=1000 maxNumIterations=2500 Fitness=529.722 Time=7.62679
+Threads=1 PopulationSize=2500 maxNumIterations=250 Fitness=805.71 Time=4.62101
+Threads=2 PopulationSize=2500 maxNumIterations=250 Fitness=800.53 Time=2.54131
+Threads=3 PopulationSize=2500 maxNumIterations=250 Fitness=797.19 Time=1.8869
+Threads=4 PopulationSize=2500 maxNumIterations=250 Fitness=791.302 Time=1.49333
+Threads=6 PopulationSize=2500 maxNumIterations=250 Fitness=795.148 Time=1.1504
+Threads=8 PopulationSize=2500 maxNumIterations=250 Fitness=795.573 Time=1.14305
+Threads=12 PopulationSize=2500 maxNumIterations=250 Fitness=796.736 Time=0.977717
+Threads=16 PopulationSize=2500 maxNumIterations=250 Fitness=784.568 Time=0.846598
+Threads=24 PopulationSize=2500 maxNumIterations=250 Fitness=798.705 Time=2.31956
+Threads=32 PopulationSize=2500 maxNumIterations=250 Fitness=790.337 Time=0.997995
+Threads=64 PopulationSize=2500 maxNumIterations=250 Fitness=793.237 Time=1.3354
+Threads=1 PopulationSize=2500 maxNumIterations=500 Fitness=694.055 Time=8.85188
+Threads=2 PopulationSize=2500 maxNumIterations=500 Fitness=694.184 Time=5.51946
+Threads=3 PopulationSize=2500 maxNumIterations=500 Fitness=701.309 Time=3.51619
+Threads=4 PopulationSize=2500 maxNumIterations=500 Fitness=695.008 Time=2.95251
+Threads=6 PopulationSize=2500 maxNumIterations=500 Fitness=693.178 Time=2.32545
+Threads=8 PopulationSize=2500 maxNumIterations=500 Fitness=697.791 Time=2.25497
+Threads=12 PopulationSize=2500 maxNumIterations=500 Fitness=688.087 Time=1.87127
+Threads=16 PopulationSize=2500 maxNumIterations=500 Fitness=693.305 Time=1.66661
+Threads=24 PopulationSize=2500 maxNumIterations=500 Fitness=700.309 Time=4.61472
+Threads=32 PopulationSize=2500 maxNumIterations=500 Fitness=696 Time=1.95566
+Threads=64 PopulationSize=2500 maxNumIterations=500 Fitness=693.339 Time=2.63799
+Threads=1 PopulationSize=2500 maxNumIterations=750 Fitness=643.056 Time=13.0357
+Threads=2 PopulationSize=2500 maxNumIterations=750 Fitness=647.182 Time=7.07444
+Threads=3 PopulationSize=2500 maxNumIterations=750 Fitness=642.08 Time=5.31663
+Threads=4 PopulationSize=2500 maxNumIterations=750 Fitness=636.546 Time=4.59474
+Threads=6 PopulationSize=2500 maxNumIterations=750 Fitness=642.381 Time=3.75318
+Threads=8 PopulationSize=2500 maxNumIterations=750 Fitness=633.518 Time=3.47975
+Threads=12 PopulationSize=2500 maxNumIterations=750 Fitness=642.949 Time=2.82144
+Threads=16 PopulationSize=2500 maxNumIterations=750 Fitness=641.148 Time=2.73668
+Threads=24 PopulationSize=2500 maxNumIterations=750 Fitness=634.471 Time=7.93369
+Threads=32 PopulationSize=2500 maxNumIterations=750 Fitness=640.852 Time=2.77102
+Threads=64 PopulationSize=2500 maxNumIterations=750 Fitness=636.685 Time=3.72773
+Threads=1 PopulationSize=2500 maxNumIterations=1000 Fitness=610.468 Time=17.257
+Threads=2 PopulationSize=2500 maxNumIterations=1000 Fitness=610.736 Time=9.83891
+Threads=3 PopulationSize=2500 maxNumIterations=1000 Fitness=606.761 Time=7.07717
+Threads=4 PopulationSize=2500 maxNumIterations=1000 Fitness=608.639 Time=5.39182
+Threads=6 PopulationSize=2500 maxNumIterations=1000 Fitness=604.42 Time=4.58044
+Threads=8 PopulationSize=2500 maxNumIterations=1000 Fitness=610.818 Time=4.68483
+Threads=12 PopulationSize=2500 maxNumIterations=1000 Fitness=613.009 Time=3.50179
+Threads=16 PopulationSize=2500 maxNumIterations=1000 Fitness=605.322 Time=3.35909
+Threads=24 PopulationSize=2500 maxNumIterations=1000 Fitness=606.739 Time=10.0201
+Threads=32 PopulationSize=2500 maxNumIterations=1000 Fitness=610.062 Time=3.48531
+Threads=64 PopulationSize=2500 maxNumIterations=1000 Fitness=604.541 Time=5.0293
+Threads=1 PopulationSize=2500 maxNumIterations=2500 Fitness=523.628 Time=42.5814
+Threads=2 PopulationSize=2500 maxNumIterations=2500 Fitness=527.501 Time=27.8177
+Threads=3 PopulationSize=2500 maxNumIterations=2500 Fitness=527.495 Time=17.7192
+Threads=4 PopulationSize=2500 maxNumIterations=2500 Fitness=521.724 Time=13.1194
+Threads=6 PopulationSize=2500 maxNumIterations=2500 Fitness=521.637 Time=10.4627
+Threads=8 PopulationSize=2500 maxNumIterations=2500 Fitness=522.389 Time=11.3905
+Threads=12 PopulationSize=2500 maxNumIterations=2500 Fitness=521.757 Time=8.69446
+Threads=16 PopulationSize=2500 maxNumIterations=2500 Fitness=522.931 Time=8.27246
+Threads=24 PopulationSize=2500 maxNumIterations=2500 Fitness=523.506 Time=22.751
+Threads=32 PopulationSize=2500 maxNumIterations=2500 Fitness=521.687 Time=8.57759
+Threads=64 PopulationSize=2500 maxNumIterations=2500 Fitness=527.088 Time=12.2108
+
 
 
 
