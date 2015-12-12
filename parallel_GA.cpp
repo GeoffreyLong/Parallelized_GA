@@ -50,6 +50,18 @@ vector<int> mutate_swap(vector<int> tour){
   return tour;
 }
 
+vector<int> mutate_swapNeighbors(vector<int> tour){
+  int indexOne = rand() % tour.size();
+  int indexTwo = (indexOne+1) % tour.size();
+  
+  int temp = tour[indexOne];
+  tour[indexOne] = tour[indexTwo];
+  tour[indexTwo] = temp;
+
+  return tour;
+}
+
+
 double calculate_fitness(vector<int> tour){
   double fitness = 0.0;
   for (int i = 1; i < tour.size(); i++){
@@ -147,16 +159,16 @@ int main(){
   int tourSize = cities.size();
 
   // Some bookkeeping and loopers for testing
-  int nTimes = 10;
+  int nTimes = 3;
   int sizes[10] = {25,50,100,250,500,1000,2500,5000,10000,25000};
-  int threads[36] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,
+  int threads[36] = {1,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,
     21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36};
   double sequentialTime = 0;
 
 
   for (int pop = 0; pop < 1; pop ++){
     for (int iter = 0; iter < 1; iter ++){
-      for (int num_threads = 0; num_threads < 36; num_threads ++){
+      for (int num_threads = 0; num_threads < 2; num_threads ++){
         int numT = threads[num_threads];
         //int populationSize = sizes[pop];
         //int maxNumIterations = sizes[iter];
@@ -182,7 +194,10 @@ int main(){
 #pragma omp for
             for (int i = 0; i < populationSize; i++){
               vector<int> tour = population[i];
-              vector<int> newTour = mutate_swap(tour);
+
+              // Mutation Operators
+              //vector<int> newTour = mutate_swap(tour);
+              vector<int> newTour = mutate_swapNeighbors(tour);
 
               // Calculate the fitness of both tours
               double fitnessOne = calculate_fitness(tour);
