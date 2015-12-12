@@ -69,18 +69,22 @@ double calculate_fitness(vector<int> tour){
 int main(){
   int nTimes = 10;
   // int sizes[15] = {1,5,10,25,50,100,200,300,400,600,800,1000,1200,1400,1600};
-  int sizes[14] = {1,5,10,25,50,100,250,500,1000,2500,5000,10000,25000,50000};
+  int sizes[10] = {25,50,100,250,500,1000,2500,5000,10000,25000};
 
-  int threads[12] = {1,2,3,4,6,8,12,16,24,32,64,128};
+  int threads[36] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,
+    21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36};
+
+double bestSpeedup = 0;
 
   double sequentialTime = 0;
   for (int pop = 0; pop < 1; pop ++){
-    for (int iter = 0; iter < 14; iter ++){
-      for (int num_threads = 0; num_threads < 12; num_threads ++){
+    for (int iter = 3; iter < 1; iter ++){
+      for (int num_threads = 0; num_threads < 36; num_threads ++){
         int numT = threads[num_threads];
-        
-        int populationSize = 250;
-        int maxNumIterations = sizes[iter];
+        //int populationSize = sizes[pop];
+        //int maxNumIterations = sizes[iter];
+        int populationSize = 500;
+        int maxNumIterations = 10000;
 
         double overallFitness = 0;
         double overallTime = 0;
@@ -172,6 +176,7 @@ int main(){
               bestFitness = curFitness;
             }
           }
+
 
           timestamp_t t1 = get_timestamp();
           double execTime = (t1 - t0) / 1000000.0L;
