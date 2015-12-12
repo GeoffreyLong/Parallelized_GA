@@ -81,8 +81,8 @@ int main(){
         int numT = threads[num_threads];
         //int populationSize = sizes[pop];
         //int maxNumIterations = sizes[iter];
-        int populationSize = 500;
-        int maxNumIterations = 10000;
+        int populationSize = 100;
+        int maxNumIterations = 2500;
 
         double overallFitness = 0;
         double overallTime = 0;
@@ -92,8 +92,10 @@ int main(){
 
           srand(time(0));
           // Use knowledge of the dataset size...
-          ifstream inFile("DataSets/eil51.tsp"); int tourSize = 51;
+          //ifstream inFile("DataSets/eil51.tsp"); int tourSize = 51;
+          ifstream inFile("DataSets/pr2392.tsp"); int tourSize = 2392;
           
+
           if (!inFile) {
             cerr << "Input file not found." << endl;
             return -1;
@@ -181,6 +183,7 @@ int main(){
 
           overallFitness += bestFitness;
           overallTime += execTime;
+          cout << execTime << endl;
         } 
 
         double time = overallTime / nTimes;
