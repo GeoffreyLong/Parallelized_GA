@@ -68,11 +68,11 @@ double calculate_fitness(vector<int> tour){
 
 int main(){
   int nTimes = 10;
-  int sizes[5] = {100,200,400,800,1600};
+  int sizes[15] = {1,5,10,25,50,100,200,300,400,600,800,1000,1200,1400,1600};
   int threads[12] = {1,2,3,4,6,8,12,16,24,32,64,128};
 
   double sequentialTime = 0;
-  for (int pop = 0; pop < 5; pop ++){
+  for (int pop = 0; pop < 15; pop ++){
     for (int iter = 0; iter < 1; iter ++){
       for (int num_threads = 0; num_threads < 12; num_threads ++){
         int numT = threads[num_threads];
@@ -184,8 +184,6 @@ int main(){
         if (numT == 1){
           sequentialTime = (double) time;
         }
-
-        cout << sequentialTime << " " << time << endl;
 
         cout << "Threads=" << numT << " PopulationSize=" << populationSize << " maxNumIterations="
           << maxNumIterations << " Fitness=" << fitness << " Speedup=" << (double) sequentialTime / (double) time << endl;
