@@ -69,91 +69,111 @@ double calculate_fitness(vector<int> tour){
   return fitness;
 }
 
-int main(){
-  int nTimes = 10;
-  // int sizes[15] = {1,5,10,25,50,100,200,300,400,600,800,1000,1200,1400,1600};
-  int sizes[10] = {25,50,100,250,500,1000,2500,5000,10000,25000};
+bool initialize_cities(){
+  // Use knowledge of the dataset size...
+  //ifstream inFile("DataSets/burma14.tsp"); int tourSize = 14;
+  ifstream inFile("DataSets/eil51.tsp"); int tourSize = 51;
+  //ifstream inFile("DataSets/eil101.tsp"); int tourSize = 101;
+  //ifstream inFile("DataSets/a280.tsp"); int tourSize = 280;
+  //ifstream inFile("DataSets/fl417.tsp"); int tourSize = 417;
+  //ifstream inFile("DataSets/pr76.tsp"); int tourSize = 76;
+  //ifstream inFile("DataSets/pr107.tsp"); int tourSize = 107;
+  //ifstream inFile("DataSets/pr299.tsp"); int tourSize = 299;
+  //ifstream inFile("DataSets/pr1002.tsp"); int tourSize = 1002;
+  //iifstream inFile("DataSets/pr2392.tsp"); int tourSize = 2392;
+  
+  
 
+  if (!inFile) {
+    cerr << "Input file not found." << endl;
+    return false;
+  }
+
+
+  string line;
+  while (std::getline(inFile, line)){
+    if (line.empty()) continue;
+  
+    istringstream iss(line);
+    int nodeNum;
+    double x, y;
+
+
+    // Not entirely sure that this will work for all files...
+    // If the input stream does not have three args it is not a tour location
+    if (!(iss >> nodeNum >> x >> y)) { continue; }
+
+
+    cities.push_back(City(nodeNum, x, y));
+
+    // Check output
+    //cout << nodeNum << " " << x << " " << y << endl;
+  }
+
+  return true;
+}
+
+vector< vector< int > > initialize_population(int populationSize){
+  vector< vector< int > > population;
+  int tourSize = cities.size();
+
+  for (int i = 0; i < populationSize; i++){
+    vector<int> tour;
+    // Set the arrays
+    // I haven't found a way to do this dynamically yet
+    for (int j = 0; j < tourSize; j++){
+      tour.push_back(j);
+    }
+
+    // Scramble the values of the arrays
+    for (int j = 0; j < tourSize; j++){
+      int index = rand() % tourSize;
+      int temp = tour[j];
+      tour[j] = tour[index];
+      tour[index] = temp;
+    }
+
+    population.push_back(tour);
+  }
+
+  return population;
+}
+
+int main(){
+  // Initialize the cities from the data file
+  if (!initialize_cities()){
+    return -1;
+  }
+  int tourSize = cities.size();
+
+  // Some bookkeeping and loopers for testing
+  int nTimes = 10;
+  int sizes[10] = {25,50,100,250,500,1000,2500,5000,10000,25000};
   int threads[36] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,
     21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36};
-
   double sequentialTime = 0;
+
+
   for (int pop = 0; pop < 1; pop ++){
     for (int iter = 0; iter < 1; iter ++){
       for (int num_threads = 0; num_threads < 36; num_threads ++){
         int numT = threads[num_threads];
         //int populationSize = sizes[pop];
         //int maxNumIterations = sizes[iter];
-        int populationSize = 500;
-        int maxNumIterations = 10000;
+
+        int populationSize = 100;
+        int maxNumIterations = 1000;
 
         double overallFitness = 0;
         double overallTime = 0;
 
         for (int x = 0; x < nTimes; x ++){
           timestamp_t t0 = get_timestamp();
-
           srand(time(0));
-          // Use knowledge of the dataset size...
-          //ifstream inFile("DataSets/burma14.tsp"); int tourSize = 14;
-          ifstream inFile("DataSets/eil51.tsp"); int tourSize = 51;
-          //ifstream inFile("DataSets/eil101.tsp"); int tourSize = 101;
-          //ifstream inFile("DataSets/a280.tsp"); int tourSize = 280;
-          //ifstream inFile("DataSets/fl417.tsp"); int tourSize = 417;
-          //ifstream inFile("DataSets/pr76.tsp"); int tourSize = 76;
-          //ifstream inFile("DataSets/pr107.tsp"); int tourSize = 107;
-          //ifstream inFile("DataSets/pr299.tsp"); int tourSize = 299;
-          //ifstream inFile("DataSets/pr1002.tsp"); int tourSize = 1002;
-          //iifstream inFile("DataSets/pr2392.tsp"); int tourSize = 2392;
-          
-          
 
-          if (!inFile) {
-            cerr << "Input file not found." << endl;
-            return -1;
-          }
-
-
-          string line;
-          while (std::getline(inFile, line)){
-            if (line.empty()) continue;
-          
-            istringstream iss(line);
-            int nodeNum;
-            double x, y;
-
-
-            // Not entirely sure that this will work for all files...
-            // If the input stream does not have three args it is not a tour location
-            if (!(iss >> nodeNum >> x >> y)) { continue; }
-
-
-            cities.push_back(City(nodeNum, x, y));
-
-            // Check output
-            //cout << nodeNum << " " << x << " " << y << endl;
-          }
 
           // Initialize population randomly
-          vector< vector< int > > population;
-          for (int i = 0; i < populationSize; i++){
-            vector<int> tour;
-            // Set the arrays
-            // I haven't found a way to do this dynamically yet
-            for (int j = 0; j < tourSize; j++){
-              tour.push_back(j);
-            }
-
-            // Scramble the values of the arrays
-            for (int j = 0; j < tourSize; j++){
-              int index = rand() % tourSize;
-              int temp = tour[j];
-              tour[j] = tour[index];
-              tour[index] = temp;
-            }
-
-            population.push_back(tour);
-          }
+          vector< vector< int > > population = initialize_population(populationSize);
 
           // Run the algorithm for a specific number of iterations
 #pragma omp parallel num_threads(numT)
