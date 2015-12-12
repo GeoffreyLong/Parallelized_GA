@@ -57,10 +57,13 @@ double calculate_fitness(vector<int> tour){
     City endCity = cities[tour[i]];
     fitness += sqrt(pow(endCity.getX()-startCity.getX(),2.0) 
         + pow(endCity.getY() - startCity.getY(),2.0));
+    startCity = endCity;
   }
 
-  fitness += sqrt(pow(cities[tour[tour.size()-1]].getX() - cities[tour[0]].getX(),2.0) 
-        + pow(cities[tour[tour.size()-1]].getY() - cities[tour[0]].getY(),2.0));
+  City startCity = cities[tour[0]];
+  City endCity = cities[tour[tour.size()-1]];
+  fitness += sqrt(pow(endCity.getX() - startCity.getX(),2.0) 
+        + pow(endCity.getY() - startCity.getY(),2.0));
 
 
   return fitness;
@@ -81,8 +84,8 @@ int main(){
         int numT = threads[num_threads];
         //int populationSize = sizes[pop];
         //int maxNumIterations = sizes[iter];
-        int populationSize = 100;
-        int maxNumIterations = 2500;
+        int populationSize = 500;
+        int maxNumIterations = 10000;
 
         double overallFitness = 0;
         double overallTime = 0;
@@ -92,8 +95,17 @@ int main(){
 
           srand(time(0));
           // Use knowledge of the dataset size...
+          ifstream inFile("DataSets/burma14.tsp"); int tourSize = 14;
           //ifstream inFile("DataSets/eil51.tsp"); int tourSize = 51;
-          ifstream inFile("DataSets/pr2392.tsp"); int tourSize = 2392;
+          //ifstream inFile("DataSets/eil101.tsp"); int tourSize = 101;
+          //ifstream inFile("DataSets/a280.tsp"); int tourSize = 280;
+          //ifstream inFile("DataSets/fl417.tsp"); int tourSize = 417;
+          //ifstream inFile("DataSets/pr76.tsp"); int tourSize = 76;
+          //ifstream inFile("DataSets/pr107.tsp"); int tourSize = 107;
+          //ifstream inFile("DataSets/pr299.tsp"); int tourSize = 299;
+          //ifstream inFile("DataSets/pr1002.tsp"); int tourSize = 1002;
+          //iifstream inFile("DataSets/pr2392.tsp"); int tourSize = 2392;
+          
           
 
           if (!inFile) {
@@ -183,7 +195,6 @@ int main(){
 
           overallFitness += bestFitness;
           overallTime += execTime;
-          cout << execTime << endl;
         } 
 
         double time = overallTime / nTimes;
