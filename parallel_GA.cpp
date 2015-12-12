@@ -95,8 +95,8 @@ int main(){
 
           srand(time(0));
           // Use knowledge of the dataset size...
-          ifstream inFile("DataSets/burma14.tsp"); int tourSize = 14;
-          //ifstream inFile("DataSets/eil51.tsp"); int tourSize = 51;
+          //ifstream inFile("DataSets/burma14.tsp"); int tourSize = 14;
+          ifstream inFile("DataSets/eil51.tsp"); int tourSize = 51;
           //ifstream inFile("DataSets/eil101.tsp"); int tourSize = 101;
           //ifstream inFile("DataSets/a280.tsp"); int tourSize = 280;
           //ifstream inFile("DataSets/fl417.tsp"); int tourSize = 417;
@@ -156,10 +156,9 @@ int main(){
           }
 
           // Run the algorithm for a specific number of iterations
-          int nIteration = 0;
-          while (nIteration < maxNumIterations){
 #pragma omp parallel num_threads(numT)
 {
+          for (int nIteration = 0; nIteration < maxNumIterations; nIteration++){
 #pragma omp for
             for (int i = 0; i < populationSize; i++){
               vector<int> tour = population[i];
@@ -174,10 +173,8 @@ int main(){
                 population[i] = newTour;
               }
             }
-}
-
-            nIteration ++;
           }
+}
 
           double bestFitness = std::numeric_limits<double>::max();
           for (int i = 0; i < populationSize; i++){
