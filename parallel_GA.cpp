@@ -177,6 +177,8 @@ vector< vector< int > > initialize_population(vector<City> cities, int populatio
   vector< vector< int > > population;
   int tourSize = cities.size();
 
+
+#pragma omp parallel for
   for (int i = 0; i < populationSize; i++){
     vector<int> tour;
     // Set the arrays
@@ -193,6 +195,7 @@ vector< vector< int > > initialize_population(vector<City> cities, int populatio
       tour[index] = temp;
     }
 
+#pragma omp critical
     population.push_back(tour);
   }
 
@@ -201,12 +204,13 @@ vector< vector< int > > initialize_population(vector<City> cities, int populatio
 
 int main(){
   vector<City> cities = initialize_cities();
+  int tourSize = cities.size();
 
   // Initialize the cities from the data file
-  if (cities.size() == 0){
+  if (tourSize == 0){
     return -1;
   }
-  int tourSize = cities.size();
+
 
   // Some bookkeeping and loopers for testing
   int nTimes = 5;
