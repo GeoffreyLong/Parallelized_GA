@@ -216,9 +216,9 @@ int main(){
               vector<int> tour = population[i];
 
               // Mutation Operators
-              //vector<int> newTour = mutate_swap(tour);
+              vector<int> newTour = mutate_swap(tour);
               //vector<int> newTour = mutate_swapNeighbors(tour);
-              vector<int> newTour = mutate_scramble(tour);
+              //vector<int> newTour = mutate_scramble(tour);
 
               // Calculate the fitness of both tours
               double fitnessOne = calculate_fitness(tour);
