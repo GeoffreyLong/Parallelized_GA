@@ -176,7 +176,9 @@ vector<City> initialize_cities(){
 vector< vector< int > > initialize_population(vector<City> cities, int populationSize){
   vector< vector< int > > population;
   int tourSize = cities.size();
-
+// NOTE1: Please note that this requires openmp 4.0, which requires gcc 4.9+
+// Alternatively can compile by removing the reduction on the for loop below 
+// And by uncommenting the line at the next NOTE1
 #pragma omp declare reduction (merge : std::vector< vector<int> > : omp_out.insert(omp_out.end(), omp_in.begin(), omp_in.end()))
 
 #pragma omp parallel num_threads(numT)
@@ -198,6 +200,7 @@ vector< vector< int > > initialize_population(vector<City> cities, int populatio
       tour[index] = temp;
     }
 
+// #pragma omp critical // NOTE1: uncomment if issues as per above NOTE1
     population.push_back(tour);
   }
 }
