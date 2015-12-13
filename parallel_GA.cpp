@@ -61,6 +61,26 @@ vector<int> mutate_swapNeighbors(vector<int> tour){
   return tour;
 }
 
+vector<int> mutate_scramble(vector<int> tour){
+  int indexOne = rand() % tour.size();
+  int indexTwo = rand() % tour.size();
+  
+  if (indexOne > indexTwo){
+    int temp = indexOne;
+    indexOne = indexTwo;
+    indexTwo = temp;
+  }
+
+  int intervalSize = indexTwo - indexOne;
+  for (int i = indexOne; i < indexTwo; i++){
+    int index = rand() % intervalSize + indexOne;
+    int temp = tour[i];
+    tour[i] = tour[index];
+    tour[index] = temp;
+  }
+
+  return tour;
+}
 
 double calculate_fitness(vector<int> tour){
   double fitness = 0.0;
@@ -159,16 +179,16 @@ int main(){
   int tourSize = cities.size();
 
   // Some bookkeeping and loopers for testing
-  int nTimes = 3;
+  int nTimes = 10;
   int sizes[10] = {25,50,100,250,500,1000,2500,5000,10000,25000};
-  int threads[36] = {1,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,
+  int threads[36] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,
     21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36};
   double sequentialTime = 0;
 
 
   for (int pop = 0; pop < 1; pop ++){
     for (int iter = 0; iter < 1; iter ++){
-      for (int num_threads = 0; num_threads < 2; num_threads ++){
+      for (int num_threads = 0; num_threads <36; num_threads ++){
         int numT = threads[num_threads];
         //int populationSize = sizes[pop];
         //int maxNumIterations = sizes[iter];
@@ -197,7 +217,8 @@ int main(){
 
               // Mutation Operators
               //vector<int> newTour = mutate_swap(tour);
-              vector<int> newTour = mutate_swapNeighbors(tour);
+              //vector<int> newTour = mutate_swapNeighbors(tour);
+              vector<int> newTour = mutate_scramble(tour);
 
               // Calculate the fitness of both tours
               double fitnessOne = calculate_fitness(tour);
