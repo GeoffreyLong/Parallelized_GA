@@ -219,7 +219,7 @@ int main(){
 
 
   // Some bookkeeping and loopers for testing
-  int nTimes = 3;
+  int nTimes = 10;
   int sizes[10] = {25,50,100,250,500,1000,2500,5000,10000,25000};
   int threads[36] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,
     21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36};
@@ -233,14 +233,15 @@ int main(){
         //int populationSize = sizes[pop];
         //int maxNumIterations = sizes[iter];
 
-        int populationSize = 250;
+        int populationSize = 500;
         int maxNumIterations = 10000;
 
         double overallFitness = 0;
         double overallTime = 0;
 
         for (int x = 0; x < nTimes; x ++){
-          timestamp_t t0 = get_timestamp();
+          // TODO replace with omp_get_wtime()?
+          double t0 = get_timestamp();
           srand(time(0));
 
 
