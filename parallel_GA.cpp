@@ -16,7 +16,7 @@
 
 using namespace std;
 typedef unsigned long long timestamp_t;
-
+int numT;
 
 static timestamp_t get_timestamp () {
   struct timeval now;
@@ -178,6 +178,8 @@ vector< vector< int > > initialize_population(vector<City> cities, int populatio
   int tourSize = cities.size();
 
 
+#pragma omp parallel num_threads(numT)
+{
 #pragma omp parallel for
   for (int i = 0; i < populationSize; i++){
     vector<int> tour;
@@ -198,6 +200,7 @@ vector< vector< int > > initialize_population(vector<City> cities, int populatio
 #pragma omp critical
     population.push_back(tour);
   }
+}
 
   return population;
 }
@@ -223,7 +226,7 @@ int main(){
   for (int pop = 0; pop < 1; pop ++){
     for (int iter = 0; iter < 1; iter ++){
       for (int num_threads = 0; num_threads < 36; num_threads ++){
-        int numT = threads[num_threads];
+        numT = threads[num_threads];
         //int populationSize = sizes[pop];
         //int maxNumIterations = sizes[iter];
 
@@ -268,17 +271,23 @@ int main(){
 }
 
           double bestFitness = std::numeric_limits<double>::max();
+
+#pragma omp parallel num_threads(numT)
+{
+#pragma omp parallel for
           for (int i = 0; i < populationSize; i++){
             vector<int> tour = population[i];
             double curFitness = calculate_fitness(tour, cities);
 
             if (curFitness < bestFitness){
+#pragma omp critical
               bestFitness = curFitness;
 
               //sort(tour.begin(), tour.end());
               //print_tour(tour);
             }
           }
+}
 
 
           timestamp_t t1 = get_timestamp();
