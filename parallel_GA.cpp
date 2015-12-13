@@ -227,7 +227,7 @@ int main(){
         //int populationSize = sizes[pop];
         //int maxNumIterations = sizes[iter];
 
-        int populationSize = 250;
+        int populationSize = 500;
         int maxNumIterations = 10000;
 
         double overallFitness = 0;
