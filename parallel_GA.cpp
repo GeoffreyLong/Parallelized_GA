@@ -37,8 +37,6 @@ class City {
     double y;
 };
 
-vector<City> cities;
-
 void print_tour(vector<int> tour){
   for (int i = 0; i < tour.size(); i++){
     cout << tour[i] << " "; 
@@ -112,7 +110,7 @@ vector<int> mutate_inversion(vector<int> tour){
   return tour;
 }
 
-double calculate_fitness(vector<int> tour){
+double calculate_fitness(vector<int> tour, vector<City> cities){
   double fitness = 0.0;
   for (int i = 1; i < tour.size(); i++){
     City startCity = cities[tour[i-1]];
@@ -131,7 +129,7 @@ double calculate_fitness(vector<int> tour){
   return fitness;
 }
 
-bool initialize_cities(){
+vector<City> initialize_cities(){
   // Use knowledge of the dataset size...
   //ifstream inFile("DataSets/burma14.tsp"); int tourSize = 14;
   ifstream inFile("DataSets/eil51.tsp"); int tourSize = 51;
@@ -144,11 +142,11 @@ bool initialize_cities(){
   //ifstream inFile("DataSets/pr1002.tsp"); int tourSize = 1002;
   //iifstream inFile("DataSets/pr2392.tsp"); int tourSize = 2392;
   
-  
+  vector<City> cities;
 
   if (!inFile) {
     cerr << "Input file not found." << endl;
-    return false;
+    return cities;
   }
 
 
@@ -172,10 +170,10 @@ bool initialize_cities(){
     //cout << nodeNum << " " << x << " " << y << endl;
   }
 
-  return true;
+  return cities;
 }
 
-vector< vector< int > > initialize_population(int populationSize){
+vector< vector< int > > initialize_population(vector<City> cities, int populationSize){
   vector< vector< int > > population;
   int tourSize = cities.size();
 
@@ -202,14 +200,16 @@ vector< vector< int > > initialize_population(int populationSize){
 }
 
 int main(){
+  vector<City> cities = initialize_cities();
+
   // Initialize the cities from the data file
-  if (!initialize_cities()){
+  if (cities.size() == 0){
     return -1;
   }
   int tourSize = cities.size();
 
   // Some bookkeeping and loopers for testing
-  int nTimes = 3;
+  int nTimes = 5;
   int sizes[10] = {25,50,100,250,500,1000,2500,5000,10000,25000};
   int threads[36] = {1,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,
     21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36};
@@ -235,25 +235,25 @@ int main(){
 
 
           // Initialize population randomly
-          vector< vector< int > > population = initialize_population(populationSize);
+          vector< vector< int > > population = initialize_population(cities, populationSize);
 
           // Run the algorithm for a specific number of iterations
 #pragma omp parallel num_threads(numT)
 {
           for (int nIteration = 0; nIteration < maxNumIterations; nIteration++){
-#pragma omp for
+#pragma omp for 
             for (int i = 0; i < populationSize; i++){
               vector<int> tour = population[i];
 
               // Mutation Operators
-              //vector<int> newTour = mutate_swap(tour);
+              vector<int> newTour = mutate_swap(tour);
               //vector<int> newTour = mutate_swapNeighbors(tour);
               //vector<int> newTour = mutate_scramble(tour);
-              vector<int> newTour = mutate_inversion(tour);
+              //vector<int> newTour = mutate_inversion(tour);
 
               // Calculate the fitness of both tours
-              double fitnessOne = calculate_fitness(tour);
-              double fitnessTwo = calculate_fitness(newTour);
+              double fitnessOne = calculate_fitness(tour, cities);
+              double fitnessTwo = calculate_fitness(newTour, cities);
 
               // Take the better performing individual
               if (fitnessTwo < fitnessOne){
@@ -266,7 +266,7 @@ int main(){
           double bestFitness = std::numeric_limits<double>::max();
           for (int i = 0; i < populationSize; i++){
             vector<int> tour = population[i];
-            double curFitness = calculate_fitness(tour);
+            double curFitness = calculate_fitness(tour, cities);
 
             if (curFitness < bestFitness){
               bestFitness = curFitness;
