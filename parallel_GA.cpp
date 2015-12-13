@@ -16,7 +16,7 @@
 
 using namespace std;
 typedef unsigned long long timestamp_t;
-
+int numT;
 
 static timestamp_t get_timestamp () {
   struct timeval now;
@@ -176,9 +176,14 @@ vector<City> initialize_cities(){
 vector< vector< int > > initialize_population(vector<City> cities, int populationSize){
   vector< vector< int > > population;
   int tourSize = cities.size();
+// NOTE1: Please note that this requires openmp 4.0, which requires gcc 4.9+
+// Alternatively can compile by removing the reduction on the for loop below 
+// And by uncommenting the line at the next NOTE1
+#pragma omp declare reduction (merge : std::vector< vector<int> > : omp_out.insert(omp_out.end(), omp_in.begin(), omp_in.end()))
 
-
-#pragma omp parallel for
+#pragma omp parallel num_threads(numT)
+{
+#pragma omp parallel for reduction(merge: population)
   for (int i = 0; i < populationSize; i++){
     vector<int> tour;
     // Set the arrays
@@ -195,9 +200,10 @@ vector< vector< int > > initialize_population(vector<City> cities, int populatio
       tour[index] = temp;
     }
 
-#pragma omp critical
+// #pragma omp critical // NOTE1: uncomment if issues as per above NOTE1
     population.push_back(tour);
   }
+}
 
   return population;
 }
@@ -223,7 +229,7 @@ int main(){
   for (int pop = 0; pop < 1; pop ++){
     for (int iter = 0; iter < 1; iter ++){
       for (int num_threads = 0; num_threads < 36; num_threads ++){
-        int numT = threads[num_threads];
+        numT = threads[num_threads];
         //int populationSize = sizes[pop];
         //int maxNumIterations = sizes[iter];
 
@@ -234,7 +240,8 @@ int main(){
         double overallTime = 0;
 
         for (int x = 0; x < nTimes; x ++){
-          timestamp_t t0 = get_timestamp();
+          // TODO replace with omp_get_wtime()?
+          double t0 = get_timestamp();
           srand(time(0));
 
 
@@ -268,6 +275,10 @@ int main(){
 }
 
           double bestFitness = std::numeric_limits<double>::max();
+
+#pragma omp parallel num_threads(numT)
+{
+#pragma omp parallel for reduction(min : bestFitness)
           for (int i = 0; i < populationSize; i++){
             vector<int> tour = population[i];
             double curFitness = calculate_fitness(tour, cities);
@@ -279,6 +290,7 @@ int main(){
               //print_tour(tour);
             }
           }
+}
 
 
           timestamp_t t1 = get_timestamp();
