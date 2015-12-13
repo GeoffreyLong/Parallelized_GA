@@ -177,10 +177,11 @@ vector< vector< int > > initialize_population(vector<City> cities, int populatio
   vector< vector< int > > population;
   int tourSize = cities.size();
 
+#pragma omp declare reduction (merge : std::vector< vector<int> > : omp_out.insert(omp_out.end(), omp_in.begin(), omp_in.end()))
 
 #pragma omp parallel num_threads(numT)
 {
-#pragma omp parallel for
+#pragma omp parallel for reduction(merge: population)
   for (int i = 0; i < populationSize; i++){
     vector<int> tour;
     // Set the arrays
@@ -197,7 +198,6 @@ vector< vector< int > > initialize_population(vector<City> cities, int populatio
       tour[index] = temp;
     }
 
-#pragma omp critical
     population.push_back(tour);
   }
 }
@@ -216,7 +216,7 @@ int main(){
 
 
   // Some bookkeeping and loopers for testing
-  int nTimes = 10;
+  int nTimes = 3;
   int sizes[10] = {25,50,100,250,500,1000,2500,5000,10000,25000};
   int threads[36] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,
     21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36};
@@ -230,7 +230,7 @@ int main(){
         //int populationSize = sizes[pop];
         //int maxNumIterations = sizes[iter];
 
-        int populationSize = 500;
+        int populationSize = 250;
         int maxNumIterations = 10000;
 
         double overallFitness = 0;
@@ -274,13 +274,12 @@ int main(){
 
 #pragma omp parallel num_threads(numT)
 {
-#pragma omp parallel for
+#pragma omp parallel for reduction(min : bestFitness)
           for (int i = 0; i < populationSize; i++){
             vector<int> tour = population[i];
             double curFitness = calculate_fitness(tour, cities);
 
             if (curFitness < bestFitness){
-#pragma omp critical
               bestFitness = curFitness;
 
               //sort(tour.begin(), tour.end());
