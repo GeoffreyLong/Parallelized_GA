@@ -69,11 +69,11 @@ double calculate_fitness(vector<int> tour){
 }
 
 int main(int argc, char **argv){
-  int size, rank;
+  int num_ranks, rank;
   MPI_Init(&argc, &argv);
-  MPI_Comm_size(MPI_COMM_WORLD, &size);
+  MPI_Comm_size(MPI_COMM_WORLD, &num_ranks);
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-  printf("SIZE = %d RANK = %d\n",size,rank);
+  printf("SIZE = %d RANK = %d\n",num_ranks,rank);
 
   //TODO add a if rank > num hosts
 
@@ -127,12 +127,21 @@ int main(int argc, char **argv){
       tour.push_back(j);
     }
 
-    // Scramble the values of the arrays
-    for (int j = 0; j < tourSize; j++){
-      int index = rand() % tourSize;
-      int temp = tour[j];
-      tour[j] = tour[index];
-      tour[index] = temp;
+    // Give each rank different population seeding
+    if (rank % num_ranks == 0){
+      // Scramble the values of the arrays
+      for (int j = 0; j < tourSize; j++){
+        int index = rand() % tourSize;
+        int temp = tour[j];
+        tour[j] = tour[index];
+        tour[index] = temp;
+      }
+    }
+    if (rank % num_ranks == 1){
+
+    }
+    if (rank % num_ranks == 2){
+
     }
 
     population.push_back(tour);
@@ -146,7 +155,17 @@ int main(int argc, char **argv){
 #pragma omp for
     for (int i = 0; i < populationSize; i++){
       vector<int> tour = population[i];
-      vector<int> newTour = mutate_swap(tour);
+
+      // Give each rank different mutation operators
+      if (rank % num_ranks == 0){
+        vector<int> newTour = mutate_swap(tour);
+      }
+      if (rank % num_ranks == 1){
+
+      }
+      if (rank % num_ranks == 2){
+
+      }
 
       // Calculate the fitness of both tours
       double fitnessOne = calculate_fitness(tour);
