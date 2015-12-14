@@ -1,3 +1,6 @@
+%TODO
+%	Different scheduling types on the for loop 
+% 	
 \documentclass[10pt,letterpaper]{article}
 
 \usepackage{cvpr}
@@ -9,6 +12,8 @@
 \usepackage{algorithm}
 \usepackage{algorithmic}
 \usepackage{etoolbox}\AtBeginEnvironment{algorithmic}{\footnotesize}
+\usepackage{graphicx}
+\usepackage{subcaption}
 
 % Include other packages here, before hyperref.
 
@@ -61,150 +66,248 @@ The darwinian principles central to evolutionary computation are those of evolut
 \item When reproductive isolation occurs a new species will form
 \end{enumerate}
 
-%TODO in order to make this simpler could talk about it in terms of TSP
+The above can be abstracted easily into programming. To model evolution in a compter environment you need encodings for a set of individuals and operators to create variety within the individuals. Central to evolutionary computation is the \textit{population}. This population is a set of \textit{individuals}, which are each an encoding of a possible solution. The individuals can be analyzed on how well they solve the underlying problem. This analysis is called \textit{fitness evaluation} and the score attributed to each individual is called its \textit{fitness}.
 
-The above can be abstracted easily into programming. To model evolution in a compter environment you need a few data pieces and operators. Central to evolutionary computation is the \textit{population}. This population is a set of \textit{individuals}, which are each an encoding of a possible solution. The individuals can be analyzed on how well they solve the underlying problem. This analysis is called \textit{fitness evaluation} and the score attributed to each individual is called its \textit{fitness}.
-
-Commonly these individuals are bit strings, however they can have more complex structures. The way in which the individual (solution) is encoded is often unique to the problem and specific implementation. The individual can be optimized to be space efficient, easily manipulated, or easily understood. However the solution is constructed, it will only be successful if it can be changed by the evolutionary operators in the framework. 
+Commonly these individuals are bit strings, however they can have more complex structures. The way in which the individual (solution) is encoded is often unique to the problem and specific implementation. The individual can be optimized to be space efficient, easily manipulated, or easily understood. Generally, the encoding will only be successful if it can be altered by the evolutionary operators in the framework. 
 
 The evolutionary operators most commonly used are \textit{mutation} and \textit{crossover}. Although mutation is present in all evolutionary computation methods, crossover is often specific to certain subsets of evolutionary computation such as genetic algorithms. Both of these operators act on \textit{alleles}, which are the smallest differentiable part of each individual. % Differentiable isn't really the right word, more like the smallest unit that can stand alone, or the smallest that can have a healthy abstraction
 
-Mutation is the alteration of an individual via a slight change in their genetic makeup. This change typically occurs through altering one of the individual's alleles or by switching two or more alleles. The resultant individual is slightly different than the original. The implementation determines how slight this difference is.
+Mutation is the alteration of an individual via a slight change in their genetic makeup. This change typically occurs through altering one of the individual's alleles or by switching two or more alleles. The resultant individual is slightly different from the original. The implementation determines how slight this difference is.
 
-Crossover involves the creation of a new individual by combining two or more "parent" individuals. Typically, these parents are selected based on their genetic fitness. The fittest individuals are usually the ones allowed to procreate. When the parents are selected, the crossover operators usually use sections of each to create one or more new individuals.  
+Crossover involves the creation of a new individual by combining two or more "parent" individuals. Typically, the parents are selected based on their genetic fitness. The fittest individuals are usually the ones allowed to procreate. When the parents are selected, the crossover operators usually use sections of each to create one or more new individuals.  
 
-
-%survival of the fittest (natural selection), mutation, mating, 
-%As the name suggests, Evolutionary Computation methods follow the common themes of evolution as described by Darwin. 
-
+The individuals in a population are operated on iteratively. Each iteration is called a \textit{generation}, and typically involves both mutations and crossovers. The population at the end of each iteration is usually larger than the previous. The final stage of the iteration is to "kill" off certain individuals so that the population is the same size as it was at the beginning. This is often known as \textit{selection}, and holds closest to the themes of natural selection. The goal of each iteration is to stochastically approach an optimal fitness value. Upon termination of the algorithm, either based on a set number of iterations or on some fitness metric, the top performing individual will be returned as the solution to the problem.
 
 
 \section{Background}
 % Previous algorithms, previous attempts at parallelization?
+In order to test the framework, I chose to implement the travelling salesperson algorithm. In this algorithm you are given an undirected fully connected graph. The edges are each weighted, the weights correspond to the cost of travelling from one node to the next. The goal is to find the least cost cycle that traverses every node at least once. 
+
+The travelling salesperson problem (TSP) is an NP-hard problem. As such, not only are we unable to compute the optimal solution in polynomial time, an optimal solution cannot even be verified in polynomial time. %TODO cite
+The TSP has many applications such as %TODO get sources
+Due to the importance of these applications, the TSP has become one of the most studied problems in computer science %TODO cite
+
+Common approaches to the TSP are often approximating algorithms. These give reasonable results within a reasonable execution time. %TODO add some jargon about this
 
 
-\section{Implementation}
-\subsection{v1.1}
-The first iteration of the genetic algorithm framework was a simple mutation and fitness based selection algorithm. Each individual was mutated via a swap (where two cities in the tour were switched at random) too create a new individual. The fitter of the two was chosen for the next generation. Since there was no crossover, this implementation was more of an evolutionary programming method. 
+
+
+
+\section{Implementation} \label{sec:implementation}
+The first iteration of the genetic algorithm framework was a simple mutation and fitness based selection algorithm. At each iteration of the framework, there is a for loop over each individual of the population. In this for loop, the individual is mutated via a swap (two cities are selected at random and switched), returning a new individual. This individual is compared to the previous (non-mutated) parent, and the fitter of the two is selected for the next generation. Since there was no crossover, this implementation was more of an evolutionary programming method. 
 %Each parent generates its own offspring. The parent is then compared to it's offspring, and the fitter of the two is allowed to survive. 
+
+The parallelization occurs over the population loop. It could not happen over the encapsulating iteration loop as the outcome of the iteration loop depends on the previous population. Since the individuals in the population were independent from one another, the population loop was a logical choice for parallelization. 
 
 The purpose of this version was to characterize the relationships between the various parameters. The parameters compared in this phase were the number of threads, the population size, and the number of iterations. These parameters were evaluated as per their impact on the fitness score of the fittest individual and execution time. The goal was to find relationships between these parameters. By finding relationships, futher testing could be constrained by focusing on only the most important parameters. 
 
+
+\subsubsection{Parameter Relationships}
 The first tests were focused on analyzing how fitness varied with the parameters. The first parameter focused on was the number of threads. Since the number of threads does not change the underlying computations, the fitness should be unaffected by an increase in the thread count. By manual inspection of the data, this was shown to be true. Since these two are uncorrelated, the fitness score of individuals can be largely left out when discussing the efficacy of the parallel implementation. It was also found that while an increase in population size does improve the fitness of the individual, there is a larger increase in fitness when the number of iterations is bolstered.
 
 Since fitness proved to be rather irrelavent in discussion of the parallel performance, speedup and execution time were focused on next. An almost linear relationship was found between the parameters population size and number of iterations (taken individually) and execution time. Doubling either the maximum number of iterations or the population size almost doubles the execution time. Therefore, population size and number of iterations seem to be directly proportional in their effect on execution time.
 
-Since we can take the population size and number of iterations to be roughly equal in their implact on execution time, we can view how varying the thread count will impact both. This involved graphical analysis of the relative execution times where population size and number of iterations were varied independently over a range of thread counts. From the graph %TODO ref
-, it can be seen that the number of threads impact both the same. So, when the number of iterations and the population size are both much greater than the number of threads, a change in the population size or the number of iterations will have generally the same effect on speedup.
+Since we can take the population size and number of iterations to be roughly equal in their implact on execution time, we can view how varying the thread count will impact both. This involved graphical analysis of the relative execution times where population size and number of iterations were varied independently over a range of thread counts. From the graph in Figure \ref{fig:itervspop}, it can be seen that the number of threads impact both the same. So, when the number of iterations and the population size are both much greater than the number of threads, a change in the population size or the number of iterations will have generally the same effect on speedup.
 
-\includegraphics[scale=1]{../img/Lenovo_Compare_ItervsPop.png} 
+\begin{figure}
+\centering
+\includegraphics[width=0.6\textwidth]{../img/Lenovo_Compare_ItervsPop.png} 
+\caption{The effect of different thread counts and population/iteration sizes on runtime.}
+\label{fig:itervspop}
+\end{figure}
 
-This relationship only holds for small thread counts though. As the number of threads approaches the population size, the speedup decreases quickly. This is shown by the graphs of population size vs thread count. %TODO refs
-Although this relationship exists between population size and speedup, there doesn't appear to be any relationship between number of iterations, number of threads, and speedup. This is shown by the graphs in Figure %TODO refs
-The reason why the population size has such a large effect is due to how the algorithm is parallelized. The OpenMP parallel construct was placed around a loop over the individuals in a population. When the number of threads increases, each thread is responsible for fewer and fewer individuals. When the number of threads is equal to the population size, each thread is responsible for one loop over one individual. The cost of spawning a thread is great when compared to the relatively small amount of work the thread is responsible for. An anomaly worth noting is that for 24 threads, the Debondt system has no speedup at all. %TODO explain this please
-
-
-\includegraphics[scale=1]{../img/Debondt_PopulationvsThreads.png} 
-\includegraphics[scale=1]{../img/Lenovo_PopulationvsThreads.png} 
+This relationship only holds for small thread counts though. As the number of threads approaches the population size, the speedup decreases quickly. This is shown by the graphs of population size vs thread count (Figure \ref{fig:popvsthread}). Although this relationship exists between population size and speedup, there doesn't appear to be any relationship between number of iterations, number of threads, and speedup. This is shown by the graphs in Figure \ref{fig:itervsthread}. The reason why the population size has such a large effect is due to how the algorithm is parallelized. The OpenMP parallel construct was placed around a loop over the individuals in a population. When the number of threads increases, each thread is responsible for fewer and fewer individuals. When the number of threads is equal to the population size, each thread is responsible for one loop over one individual. The cost of spawning a thread is great when compared to the relatively small amount of work the thread is responsible for. An anomaly worth noting is that for 24 threads, the Debondt system has no speedup at all. This is further discussed in Section \ref{sec:results}
 
 
-\includegraphics[scale=1]{../img/Debondt_IterationvsThreads.png} 
-\includegraphics[scale=1]{../img/Lenovo_IterationvsThreads.png} 
+\begin{figure}[t]
+\centering
+   \begin{subfigure}{0.49\linewidth} \centering
+	\includegraphics[width=\textwidth]{../img/Debondt_PopulationvsThreads.png} 
+     \caption{Debondt}\label{fig:figA}
+   \end{subfigure}
+   \begin{subfigure}{0.49\linewidth} \centering
+	\includegraphics[width=\textwidth]{../img/Lenovo_PopulationvsThreads.png}         
+     \caption{Lenovo}\label{fig:figB}
+   \end{subfigure}
+\caption{ffect of population size and number of threads on speedup (EIL51).} \label{fig:popvsthreads}
+\end{figure}
 
 
-So, based on the above, if the population size is sufficiently high, the population size and iteration count can essentially be left out of conversations on speedup. In order to accuratly calculate speedup, an ideal number for population size and maximum number of iterations was ascertained. This was found by running the program on the Lenovo with a set number of threads and a varying population size and iteration number. From the resultant graph (Figure %TODO ref
-), I found that a population size of 500 with an iteration number of 10000 was ideal for futher testing. These number maximized the speedup and minimized the overall execution time while still providing a good final fitness. 
+\begin{figure}[t]
+\centering
+   \begin{subfigure}{0.49\linewidth} \centering
+	\includegraphics[width=\textwidth]{../img/Debondt_IterationvsThreads.png} 
+     \caption{Debondt}\label{fig:figA}
+   \end{subfigure}
+   \begin{subfigure}{0.49\linewidth} \centering
+	\includegraphics[width=\textwidth]{../img/Lenovo_IterationvsThreads.png}
+     \caption{Lenovo}\label{fig:figB}
+   \end{subfigure}
+\caption{Effect of number of iterations and number of threads on speedup (EIL51).} \label{fig:itervsthreads}
+\end{figure}
+ 
 
-\includegraphics[scale=1]{../img/Lenovo_4Thread_PopvsIter.png} 
+
+So, based on the above, if the population size is sufficiently high, the population size and iteration count can essentially be left out of conversations on speedup. In order to accuratly calculate speedup, an ideal number for population size and maximum number of iterations was ascertained. This was found by running the program on the Lenovo with a set number of threads and a varying population size and iteration number. From the resultant graph (Figure 
+\ref{fig:popvsiter}), I found that a population size of 250 with an iteration number of 10000 was ideal for futher testing on the Lenovo machine. On Debondt, the ideal population size seemed to be closer to 500 individuals. These parameter values maximized the speedup and minimized the overall execution time while still providing a good final fitness. 
+
+\begin{figure}
+\centering
+\includegraphics[width=0.6\textwidth]{../img/Lenovo_4Thread_PopvsIter.png} 
+\caption{Impact of population size and number of iterations on overall speedup (Lenovo - 4 threads - EIL51).}
+\label{fig:popvsiter}
+\end{figure}
 
 When running the algorithm on the EIL51 dataset with the aforementioned sizes, I get a maximum speedup of 1.75 on a Lenovo ideapad with an Intel(R) Core(TM) i5-4200U CPU @ 1.60GHz. This processor has two cores with two threads per core. With hyperthreading this creates four virtual cores. The peak speedup occurs at 2 threads, and again at 4 threads. Three threads sees a bit of a lull. This may be because of OpenMP's thread migration. Two threads is really all the computer can fully utilize though, since hyperthreading doesn't really help for cases such as this where there is a lot of floating point computation. %TODO see when hyperthreading does work %TODO link to convo about 24 threads in Debondt
 
 Since only having two cores was severly limiting, I got access to a cim server called Debondt. This server has %TODO list out specs. 
 
-Armed with Debondt, I was able to then do some testing in parallel, which sped up my results acquisition phase. The aforementioned sizes were then run on Debondt and the Lenovo with variable thread counts to characterize the speedup. From these trials I got the following graphs. 
-
-\includegraphics[scale=1]{../img/Debondt_speedup.png} 
-\includegraphics[scale=1]{../img/Lenovo_Speedup.png} 
+Armed with Debondt, I was able to then do some testing in parallel, which sped up my results acquisition phase. The aforementioned sizes were then run on Debondt and the Lenovo with variable thread counts to characterize the speedup. From these trials I got the graphs in Figure \ref{fig:EILspeedups}.
 
 
-The final trials involved determining the effects of tour size on the speedup. Thankfully, I had a few different tours of varied length. These were run using Debondt and the outcome was graphed in Figure %TODO ref
+\begin{figure}[t]
+\centering
+   \begin{subfigure}{0.49\linewidth} \centering
+	\includegraphics[width=\textwidth]{../img/Debondt_speedup.png} 
+     \caption{Speedup of Debondt over the EIL51 dataset.}\label{fig:figA}
+   \end{subfigure}
+   \begin{subfigure}{0.49\linewidth} \centering
+	\includegraphics[width=\textwidth]{../img/Lenovo_Speedup.png} 
+     \caption{Speedup of Lenovo over the EIL51 dataset.}\label{fig:figB}
+   \end{subfigure}
+\caption{Overall caption} \label{fig:EILspeedups}
+\end{figure}
 
-%TODO add graph of different tour stuff
+
+The final trials involved determining the effects of tour size on the speedup. Thankfully, I had a few different tours of varied length. These were run using Debondt and the outcome was graphed in Figure \ref{fig:tours}. As is shown, the larger the tour size, the larger the speedup. 
+
+\begin{figure}
+\centering
+\includegraphics[width=0.6\textwidth]{../img/dataset_speedups.png} 
+\caption{Impact of tour length on overall speedup (Debondt).}
+\label{fig:tours}
+\end{figure}
+
+\subsubsection{Optimizations}
+\paragraph{Optimized Initial (v1.4): } This version was an optimized version of the initial. The first change was to move the \texttt{openmp parallel} construct to the outside of the first loop. This reduced overhead since threads did not have to be spawned and killed at every iteration of the outer loop. The second change was the parallelization of population instantiation. This section will take the cities from the tour and create individuals by scrambling the ordering. Previously this was omitted since the initialization was expected to take little time in comparison to the iterative updates on the population. The section was parallelized in this version using another pragma for loop. Since the work inside the for loop involved adding an object to a shared vector, a critical section had to be inserted. The critical section encapsulates the pushing of the individual to the population vector. 
+
+The bulk of the parallelization still occurs at the inner population loop as before. Several different loop schedules were attempted for the inner loop, however, the default seemed to work the best. This default is static looping over large chunks. The schedule works best because each individual should take the same amount of work. Dynamic scheduling introduces unneeded overhead. Varying the chunk size did not appear to have much of an effect, so it was kept large to reduce false sharing, should any be possible. 
 
 
+\paragraph{Three Loop Optimized Parallel (v1.5): } This version saw an added parallelization for the fittest individual calcuations. This loop is performed at the end of the iterative process and will find the fittest individual in the population. Similar to the initialization loop, this calculation was viewed as trivial in comparison to the main iterative loop. Although the increase in speedup was expected to be rather small, the optimization was still performed. Since this loop involves storing the top fitness value in a public object, a critical section needed to be added. Although an atomic operation was deemed to have less overhead \cite{atomicoverhead}, it would not work properly for the encapsulated assignment. The critical section was eventually replaced by a reduction clause, since a reduction seemed to have even less overhead than an atomic in addition to being more dynamic %\cite{http://michaelsuess.net/publications/suess_leopold_common_mistakes_06.pdf}. %TODO check this if time... I'm not sure if reductions should be used...
+So the parallelization ended up being a parallelized for loop. Each thread will get its own copy of the best fitness value. At the end of the loop openmp will reduce this array of fitness values to find the optimal value.
+ 
+In addition to the added parallelization, the population initialization was optimized. The critical section in the population parallelization was viewed as unnecessary synchronization. The first option was to remove the critical section by directly accessing the indices on writes. I decided not to proceed with this change because it would involve changing the vector datatype and it could introduce false sharing and other unfavorable conditions. Luckily, I found a better alternative. This was to declare an openmp reduction function for merging the vectors created by each individual thread. The resultant vectors from each thread are merged out of order, however, this is actually preferred since the individual creation is supposed to be randomized. Optimizing this loop required an update to GCC 4.9 (OpenMP 4.0), but was otherwise rather simple.
+
+\section{Results} \label{sec:results}
+The three iterations were tested with the EIL51 dataset with a population size of 500 and an iteration count of 10000. The resulting speedups are shown in Figure \ref{fig:versions}. As can be seen, %TODO finish
+
+%TODO comparison graph should be moved to lower section?
+\begin{figure}
+\centering
+%\includegraphics[width=0.6\textwidth]{} 
+\caption{Speedup comparison of versions v1.1, v1.4, and v1.5 (Debondt - EIL51).}
+\label{fig:versions}
+\end{figure}
+
+Many of the characterizations of the evolutionary strategy can be seen in Section \ref{sec:implementation}. To summarize the section, the speedup was mostly dependent on the population size and the resultant fitness was mostly dependent on the number of iterations. A suitable relationship between optimal runtime, fitness value, and speedup was found to be a population of 500 individuals and a number of iterations around 10000. Population size had a large effect on speedup since the main parallelization is in a loop over the individuals in a population. As the number of threads and the population size converge, the speedup decreases. Dramatic decreases can be seen when the number of threads reaches roughly half of the population size. At this point, a significant number of threads are left hanging as the others perform work. In addition, as was discussed before, the thread creation overhead increases as the useful work per processor decreases. As a result, the speedup decreases.
+
+Tour size was another parameter that greatly affected speedup. As was shown Figure \ref{fig:tours}, As the tour size increased, the speedup did as well. %TODO line fit this?
+This behaviour seemed to be logarithmic with the number of cities in the tour. The speedup dropped off below about 75 cities, and seemed to reach a peak around 1000 cities. This is because the most computationally rigourous section of the code is the fitness evaluation. The fitness evaluation calcuates the overall distance travelled in a tour via the euclidean distance formula. Since any tour traverses each city, the fitness evaluation will depend on the number of cities. During the fitness evaluation, each thread is doing useful work. If the tour size is small, then the threads may spend more time looping over the shared index variables. So the porportion of useful work to overhead is greater when the city size is greater.
+
+As can be seen in many of the tests, the speedup on Debondt dropped off rapidly at around 24 threads. As was discussed previously, the Debondt system has 
+
+
+More testing instances can be found on Github under the \texttt{Results} subfolder. In (almost) all of the files, the columns are as follows: number of threads, population size, number of iterations, fitness, speedup, (runtime). Though the vast majority of the files follow this format, several of the earlier tests could have slightly different configurations. Each of these instances were averaged over at least five runs, though most of them are averages over ten runs. In addition to the testing instances, the matlab programs for graphing can be found there as well as the initial attempt at a distributed genetic algorithm framework. The plan for the distributed framework was to run it similar to the parallel program, but to have each rank take on a different series of evolutionary operators. From this, I expected to have divergent behaviour on each host, a more varied set of populations, and therefore higher chances of finding an optimal solution.
+
+\section{Discussion}
 %If we follow the fastest runtimes, then both the PThreads and OpenMP programs reach their peak performance at four threads. My computer is running an Intel(R) Core(TM) i5-4200U CPU @ 1.60GHz. This processor has two cores with two threads per core. With hyperthreading this creates four virtual cores. It then makes sense that the fastest runtimes would appear at four threads, since four threads is the maximum number of "simultaneous" (due to hyperthreading) threads that can be run. At any number less than four threads, the program isn't harnessing all of the computer resources. Anything over four threads and the threads will be interleaved. % Get better word
 %Theoretically, having more threads than cores could be advantageous if any threads have to wait for I/O or mutex variables. In this case, the threads would run on the CPU cycles when the other threads are waiting. In this program, however, the processing component is not too intensive compared to the I/O requirements and therefore having more threads than the number of cores provides no notable benefits. As a matter of fact, these instances with large thread counts actually will run slower since each thread will take a non-trivial amount of time to instantiate each thread.
 
 %Although the fastest runtimes occur at a thread count of four for PThreads and OpenMP run, OpenMP generally runs faster at eight cores. This may have to do with OpenMP's thread migration and CPU affinity settings. When the number of threads exceeds the number of cores, then the threads of OpenMP may optimally migrate from core to core. When the number of threads matches the number of cores, however, the thread is likely locked to the virtual core. Since this core is only virtual, if a single thread is pushing the physical core to 100\% usage then this may be consuming both virtual cores. This would explain the strange values in OpenMP when the number of threads is four. It does not explain why the binarized version performed so much worse than the Sobel version for four threads. Perhaps this has to do with the dynamic runtime environment of OpenMP and how cores are bound at runtime. Further testing would involve changing more of the environment variables, such as OMP\_PROC\_BIND and GOMP\_CPU\_Affinity, as well as testing with pixel padding. I did try altering the loops indexing; running the OpenMP in their double for loop (instead of flattening) with collapse(2); and running the loops with slightly different OpenMP commands (such as schedule(dynamic) with different chunk sizes). None of these offered a performance increase though, nor did they change the strange behaviours I referenced earlier.
 
 
-
-\subsection{v1.2}
-In this version, additional mutation operators were added as well as a crossover and parent selection technique.
-
-
-\section{Results}
-
 \section{Conclusions}
+Unfortunately, I was unable to implement everything I had planned for this project. The testing phase took up a considerable portion of the project time. Each test took anywhere between an thirty minutes and several hours to complete. Although running each test didn't take too much effort, it was still a bottleneck in the development process. To assuage this, I parallelized my workflow by offloading the testing to the Debondt server. Locally, I would develop new code and test the results on small instances. When a suitable update was created, I would offload it to the server. This way I could develop a new iteration locally while running full tests on the old version remotely. This isn't ideal because I wouldn't fully know the characteristics of the new version until much later. It did allow for quicker release and versioning than testing and developing on the same machine. The main issue with testing in this manner was that I didn't know who else was using the server. Although I believe that I had most of the Debondt's resources, there is a chance that other programs were running during certain tests. This would certainly skew the results. 
+
+In hindsight, it would have been good to develop a more formal testing framework. As it was, I simply would update the parameters, run the system, then paste the output into a \texttt{.dat} file. Although this worked, it wasn't the most convenient. If I had pushed the output directly to files this would have been quicker. I did manage to formalize the testing slightly by running the majority of the simulations with the same parameter values and data sets. Changing these values for testing wasn't the most intuitive in my system though. With a formalized testing framework I would have been able to vary my tests with greater ease. Developing such a system probably would have taken more time than it was worth though.
+
+Saving the output, then running analysis on the data later was certainly a good idea. Initially I planned on graphing the results immediately. It was only my limited knowledge of C++ that guided me towards matlab. Thankfully though, performing the analysis in this manner meant that I had more control over the graphing process. If the system had output a graph directly without saving the data, I would not have been able to evaluate as many or as complex comparisons. Only by running analysis in this manner was I able to provide the best data visualizations and the most comparisons through the fewest number of test iterations.
+
+If I had more time I would do the following:
+\begin{itemize}
+\item A suitable crossover implementation and a more variable selection method. Currently the framework lacks a crossover algorithm. As such, it is not a true GA. Also, the parent selection is takes place between the initial individual and its mutated offspring, so it is hard to extend to different selection types. The trouble is in extending the population out of the single iterative loop. I have had trouble in manipulating the data while maintaining speedup when trying to create a new population within the current iterative loop. The trouble mainly lies in the vector data type. Since this was my first C++ program, I didn't have enough knowledge of proper construction and data management. I thought that vectors would be a good way to store the data, but now I am unsure. Since the population and individual sizes were known beforehand, it might have been easier to simply use an integer array.
+\item A visualization for the TSP solution. Initially I had planned on creating a sort of bitmap or heatmap to visually display the individual for intra and inter population comparisons. The plan was to have each index of a matrix be a city in the tour. This index-city pairing would be immutable for the specific tour being run. The value at the index could then be one of several things including the distance from the city at that index to the next city in the tour; the location of the city in the tour; or the distance of that city to a fixed point. There are a great number of ways to generate this visualization, as long as the cities at each index in the matrix are the same across individuals, the visualization should provide a good comparison.
+\item Make the framework more extensible. Currently the system is only tailored towards the travelling salesperson algorithm, and even as far as that goes it is rather constrained. Ideally, the bulk of the framework would be general evolutionary operators and the bulk of the runtime logic for the evolutionary process. The individual's construction and fitness evaluation could be moved to a separate file. Since only really the individual and the fitness evaluation are implementation specific, the user would only have to alter this file to change the algorithm being evolved.
+\item Better organization of the code base. Currently, the framework exists as a single God file. Moving the evolutionary operators to a separate file would greatly increase readability.
+\end{itemize}
+
+In summary, there was a lot more to be done on this project. The initial proposal was too large a task for one single person to take within the timeframe of this project. Perhaps if I had several people, then I could have realized my initial plans more fully. In addition, I spent far more time testing and characterizing the initial versions than I had initially planned. Initially, this project was geared towards creating a parallelized framework to view divergent evolutionary behaviour. As development progressed however, the focus shifted more towards optimizing speedup. Although the current version is lacking in features, it is likely to have far greater speedup than the original plans would have allowed for. Perhaps the remainder of this framework can be a future project of mine.
 
 
-\section{Pertinent Results}
+\section{terminology}
+% All ec terms
+% false sharing
+
 \subsection{Simple Sequential}
 \subsubsection{Population Based}
-PopulationSize=100 maxNumIterations=100 Fitness=1006.61 Time=0.0594495
-PopulationSize=200 maxNumIterations=100 Fitness=971.531 Time=0.116636
-PopulationSize=300 maxNumIterations=100 Fitness=983.57 Time=0.179451
-PopulationSize=400 maxNumIterations=100 Fitness=940.753 Time=0.23334
-PopulationSize=500 maxNumIterations=100 Fitness=985.453 Time=0.292069
-PopulationSize=600 maxNumIterations=100 Fitness=995.133 Time=0.353345
-PopulationSize=700 maxNumIterations=100 Fitness=976.031 Time=0.438044
-PopulationSize=800 maxNumIterations=100 Fitness=959.766 Time=0.466137
-PopulationSize=900 maxNumIterations=100 Fitness=969.391 Time=0.522619
-PopulationSize=1000 maxNumIterations=100 Fitness=972.207 Time=0.585324
-PopulationSize=2000 maxNumIterations=100 Fitness=942.047 Time=1.17845
-PopulationSize=3000 maxNumIterations=100 Fitness=938.467 Time=1.88575
-PopulationSize=4000 maxNumIterations=100 Fitness=940.066 Time=2.37096
-PopulationSize=5000 maxNumIterations=100 Fitness=927.209 Time=3.02321
-PopulationSize=6000 maxNumIterations=100 Fitness=920.407 Time=3.73201
-PopulationSize=7000 maxNumIterations=100 Fitness=919.812 Time=4.54565
-PopulationSize=8000 maxNumIterations=100 Fitness=922.916 Time=5.10203
-PopulationSize=9000 maxNumIterations=100 Fitness=929.764 Time=5.55095
-PopulationSize=10000 maxNumIterations=100 Fitness=925.476 Time=6.07093
+\begin{tabular}{ c | c | c | c | c }
+ 1 & 100 & 100 & 1006.61 & 0.0594495 \\
+ 1 & 200 & 100 & 971.531 & 0.116636 \\
+ 1 & 300 & 100 & 983.57 & 0.179451 \\
+ 1 & 400 & 100 & 940.753 & 0.23334 \\
+ 1 & 500 & 100 & 985.453 & 0.292069 \\
+ 1 & 600 & 100 & 995.133 & 0.353345 \\
+ 1 & 700 & 100 & 976.031 & 0.438044 \\ 
+ 1 & 800 & 100 & 959.766 & 0.466137 \\   
+ 1 & 900 & 100 & 969.391 & 0.522619 \\
+ 1 & 1000 & 100 & 972.207 & 0.585324 \\
+ 1 & 2000 & 100 & 942.047 & 1.17845  \\
+ 1 & 3000 & 100 & 938.467 & 1.88575 \\
+ 1 & 4000 & 100 & 940.066 & 2.37096 \\
+ 1 & 5000 & 100 & 927.209 & 3.02321 \\
+ 1 & 6000 & 100 & 920.407 & 3.73201 \\
+ 1 & 7000 & 100 & 919.812 & 4.54565 \\
+ 1 & 8000 & 100 & 922.916 & 5.10203 \\
+ 1 & 9000 & 100 & 929.764 & 5.55095 \\
+ 1 & 10000 & 100 & 925.476 & 6.07093 \\
+\end{tabular}
 
 \subsubsection{Iteration Based}
-PopulationSize=100 maxNumIterations=100 Fitness=1005.18 Time=0.0612377
-PopulationSize=100 maxNumIterations=200 Fitness=879.523 Time=0.117883
-PopulationSize=100 maxNumIterations=300 Fitness=800.886 Time=0.174866
-PopulationSize=100 maxNumIterations=400 Fitness=791.031 Time=0.237152
-PopulationSize=100 maxNumIterations=500 Fitness=716.329 Time=0.292422
-PopulationSize=100 maxNumIterations=600 Fitness=700.984 Time=0.351435
-PopulationSize=100 maxNumIterations=700 Fitness=698.819 Time=0.41049
-PopulationSize=100 maxNumIterations=800 Fitness=685.63 Time=0.476722
-PopulationSize=100 maxNumIterations=900 Fitness=667.82 Time=0.530665
-PopulationSize=100 maxNumIterations=1000 Fitness=650.368 Time=0.59416
-PopulationSize=100 maxNumIterations=2000 Fitness=573.286 Time=1.23812
-PopulationSize=100 maxNumIterations=3000 Fitness=534.997 Time=1.79002
-PopulationSize=100 maxNumIterations=4000 Fitness=521.264 Time=2.36564
-PopulationSize=100 maxNumIterations=5000 Fitness=510.855 Time=2.95029
-PopulationSize=100 maxNumIterations=6000 Fitness=503.941 Time=3.781
-PopulationSize=100 maxNumIterations=7000 Fitness=505.155 Time=4.3372
-PopulationSize=100 maxNumIterations=8000 Fitness=498.558 Time=4.94316
-PopulationSize=100 maxNumIterations=9000 Fitness=502.808 Time=5.59283
-PopulationSize=100 maxNumIterations=10000 Fitness=497.015 Time=6.0404
+\begin{tabular}{ c | c | c | c | c }
+ 1 & 100 & 100 & 1005.18 & 0.0612377 \\
+ 1 & 100 & 200 & 879.523 & 0.117883 \\
+ 1 & 100 & 300 & 800.886 & 0.174866 \\
+ 1 & 100 & 400 & 791.031 & 0.237152 \\
+ 1 & 100 & 500 & 716.329 & 0.292422 \\
+ 1 & 100 & 600 & 700.984 & 0.351435 \\
+ 1 & 100 & 700 & 698.819 & 0.41049 \\
+ 1 & 100 & 800 & 685.63 & 0.476722 \\
+ 1 & 100 & 900 & 667.82 & 0.530665 \\
+ 1 & 100 & 1000 & 650.368 & 0.59416 \\
+ 1 & 100 & 2000 & 573.286 & 1.23812 \\
+ 1 & 100 & 3000 & 534.997 & 1.79002 \\
+ 1 & 100 & 4000 & 521.264 & 2.36564 \\
+ 1 & 100 & 5000 & 510.855 & 2.95029 \\
+ 1 & 100 & 6000 & 503.941 & 3.781 \\
+ 1 & 100 & 7000 & 505.155 & 4.3372 \\
+ 1 & 100 & 8000 & 498.558 & 4.94316 \\
+ 1 & 100 & 9000 & 502.808 & 5.59283 \\
+ 1 & 100 & 10000 & 497.015 & 6.0404 \\
+\end{tabular}
 
 \subsubsection{Thread Based}
-Threads=1 PopulationSize=500 maxNumIterations=10000 Fitness=480.492 Time=28.9301
-Threads=2 PopulationSize=500 maxNumIterations=10000 Fitness=481.042 Time=17.08
-Threads=3 PopulationSize=500 maxNumIterations=10000 Fitness=486.164 Time=19.4246
-Threads=4 PopulationSize=500 maxNumIterations=10000 Fitness=481.419 Time=16.1616
-Threads=6 PopulationSize=500 maxNumIterations=10000 Fitness=478.596 Time=18.4624
-Threads=8 PopulationSize=500 maxNumIterations=10000 Fitness=484.597 Time=18.7737
-Threads=16 PopulationSize=500 maxNumIterations=10000 Fitness=484.133 Time=19.2235
-Threads=32 PopulationSize=500 maxNumIterations=10000 Fitness=485.378 Time=20.5241
-Threads=64 PopulationSize=500 maxNumIterations=10000 Fitness=480.417 Time=20.9859
-
-
-
+\begin{tabular}{ c | c | c | c | c }
+1 & 500 & 10000 & 480.492 & 28.9301 \\
+2 & 500 & 10000 & 481.042 & 17.08 \\
+3 & 500 & 10000 & 486.164 & 19.4246 \\
+4 & 500 & 10000 & 481.419 & 16.1616 \\
+6 & 500 & 10000 & 478.596 & 18.4624 \\
+8 & 500 & 10000 & 484.597 & 18.7737 \\
+16 & 500 & 10000 & 484.133 & 19.2235 \\
+32 & 500 & 10000 & 485.378 & 20.5241 \\
+64 & 500 & 10000 & 480.417 & 20.9859 \\
+\end{tabular}
 
 
 
@@ -216,6 +319,6 @@ Threads=64 PopulationSize=500 maxNumIterations=10000 Fitness=480.417 Time=20.985
 % https://www.ndsu.edu/pubweb/~mcclean/plsc431/popgen/popgen5.htm
 % http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/
 %	Used the symmetric TSP stuff
-
+% atomicoverhead: https://software.intel.com/en-us/articles/performance-obstacles-for-threading-how-do-they-affect-openmp-code
 
 \end{document}

@@ -1,11 +1,11 @@
 % Can use either data set
-%i=importdata('Results/lenovo_v1-1.dat'); 
-i=importdata('Results/lenovo_v1-1_2.dat'); 
+%i=importdata('Results/eil_51/lenovo_v1-1.dat'); 
+i=importdata('Results/eil_51/lenovo_v1-1_2.dat'); 
 
 % Change the parameters to compare different data points
 numThreads = 4;
-population = 250;
-iteration = 250;
+population = 1000;
+iteration = 1000;
 
 it1 = i(i(:,1)==1,:); % Select only sequential data points
 it2 = i(i(:,1)==numThreads,:); % Select only X threaded data points
@@ -25,11 +25,19 @@ p = plot(x,yi,x,yi2,x,yp,x,yp2);
 p(1).Marker = '*';
 p(1).Color = 'blue';
 p(2).Marker = '*';
-p(2).Color = 'blue';
+p(2).Color = 'red';
 
 p(3).Marker = 'o';
-p(3).Color = 'red';
+p(3).Color = 'blue';
 p(4).Marker = 'o';
 p(4).Color = 'red';
 
-legend([p(1), p(3)], 'iteration', 'population', 'Location', 'northwest');
+legend('Iteration (Sequential)', 'Iteration (4 threads)', 'Population (Sequential)', 'Population (4 threads)', ...
+    'Location', 'northwest');title('Graph of Speedup for Lenovo on EIL51 Dataset');
+
+title('Comparison of Relative Execution Time');
+xlabel('Population Size (for Population) or # Iterations (for Iteration)') 
+ylabel('Execution Time (seconds)') 
+
+
+
