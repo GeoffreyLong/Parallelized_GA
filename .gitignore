@@ -3,3 +3,6 @@
 *.aux
 *.log
 *.synctex.gz
+*.bbl
+*.blg
+temp.m

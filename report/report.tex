@@ -213,15 +213,15 @@ Also tested on v1.5Critical were the different mutation operators.
 
 
 \subsection{Final Version (v1.6)} 
-The final optimizations mostly had to do with changing the scheduling for the loops. As was shown before, the schedule that works best is the "runtime" schedule. The schedule was added to only the population loop. This decision was mostly based on the fact that the population loop is the most dynamic due to the mutation methods.
+The final optimizations mostly had to do with changing the scheduling for the loops. As was shown before, the schedule that works best is the "runtime" schedule. The schedule was added to only the population loop. This decision was mostly based on the fact that the population loop is the most dynamic due to the mutation methods. Also, the mutation operator was switched as well. Previously most tests were conducted using the swap mutation, however, inversion was shown to have both the best fitness results and the greatest speedup. The final alteration was preallocating the vectors.
 
 \section{Results} \label{sec:results}
-The three iterations were tested with the EIL51 dataset with a population size of 500 and an iteration count of 10000. The resulting speedups are shown in Figure \ref{fig:versions}. As can be seen, %TODO finish AFTER THE FINAL 1-5 TESTING
+The three iterations were tested with the EIL51 dataset with a population size of 500 and an iteration count of 10000. Unfortunately, version v1.5 could not be tested on Debondt due to compiler issues, so v1.5 critical was used instead. The resulting speedups are shown in Figure \ref{fig:versions}. As can be seen, the speedup of v1.4 was faster than v1.5 critical. This was likely due to the synchronization overhead of the critical section in v1.5 critical.
 
 \begin{figure}
 \centering
-%\includegraphics[width=0.6\textwidth]{} 
-\caption{Speedup comparison of versions v1.1, v1.4, and v1.5 (Debondt - EIL51).}
+\includegraphics[width=0.6\textwidth]{../img/debondt_versions.png} 
+\caption{Speedup comparison of versions v1.1, v1.4, and v1.5 critical (Debondt - EIL51).}
 \label{fig:versions}
 \end{figure}
 
@@ -238,10 +238,7 @@ The three iterations were tested with the EIL51 dataset with a population size o
 \caption{Effect of different mutations on Speedup and Fitness (EIL51 - Debondt - v1.5Critical} \label{fig:mutations}
 \end{figure}
 
-%TODO graph of Lenovo speedup
-The peak speedup for the Lenovo was found to be around 1.75. This occurs at 2 threads, and again at 4 threads. 
-
-The peak speedup for the Debondt server was found to be 8.85 at 22 threads on the pr2392 dataset with a population of 500 and 5000 iterations (version 1.1). On the eil51 dataset with a population of 500 and 1000 iterations the peak speedup was 6.71 at 18 threads (version 1.4). On the eil51 dataset with a dynamic scheduling on the population loop, 500 individuals, and 10000 iterations, the speedup at 12 threads (number of cores) was 6.99, at the peak (17 threads) it was 7.98, and with two threads it was 1.947. Although these were the found speedups, there could be a configuration of dataset, population size, and iteration count that yields a higher speedup. Theoretically, for the Debondt server, the maximum would fall around 10. This is based on the relative gains of using different parameters versus the found speedups. As can be seen, a good amount of speedup is acheived, especially with a lower thread count. 
+The peak speedup for the Debondt server was found to be 8.85 at 22 threads on the pr2392 dataset with a population of 500 and 5000 iterations (version 1.1). On the eil51 dataset with a population of 500 and 1000 iterations the peak speedup was 6.71 at 18 threads (version 1.4). On the eil51 dataset with a dynamic scheduling on the population loop, 500 individuals, and 10000 iterations, the speedup at 12 threads (number of cores) was 6.99, at the peak (17 threads) it was 7.98, and with two threads it was 1.947. A peak speedup of 11 was found at 18 threads on Debondt for v1.5 critical with a dynamic runtime, preallocation of the vectors, a population of 500 and an interation count of 2500. Although these were the found speedups, there could be a configuration of dataset, population size, and iteration count that yields a higher speedup. As can be seen, a good amount of speedup is acheived, especially porportional to the number of threads with a lower thread count. 
 
 The speedup for v1.5crit run on Debondt with dynamic scheduling on the population, a population size of 500, and an iteration count of 10000 was fit with a few equations. The linear fit for the first 6 threads was found to be $ y = 0.8368 + 0.2528 $. The logarithmic fit for the first 17 threads (until the maximum speedup) was found to be $y = 2.6918*\log(x) + 0.3317$. This is graphed in Figure \ref{fig:linefits}. The logarithmic fit gives a rather good characterization of the speedup for the Debondt system.
 % Could do an error analysis on the fitting
@@ -290,65 +287,65 @@ If I had more time I would do the following:
 In summary, there was a lot more to be done on this project. The initial proposal was too large a task for one single person to take within the timeframe of this project. Perhaps if I had several people, then I could have realized my initial plans more fully. In addition, I spent far more time testing and characterizing the initial versions than I had initially planned. Initially, this project was geared towards creating a parallelized framework to view divergent evolutionary behaviour. As development progressed however, the focus shifted more towards optimizing speedup. Although the current version is lacking in features, it is likely to have far greater speedup than the original plans would have allowed for. Perhaps the remainder of this framework can be a future project of mine.
 
 
-\subsection{Simple Sequential}
-\subsubsection{Population Based}
-\begin{tabular}{ c | c | c | c | c }
- 1 & 100 & 100 & 1006.61 & 0.0594495 \\
- 1 & 200 & 100 & 971.531 & 0.116636 \\
- 1 & 300 & 100 & 983.57 & 0.179451 \\
- 1 & 400 & 100 & 940.753 & 0.23334 \\
- 1 & 500 & 100 & 985.453 & 0.292069 \\
- 1 & 600 & 100 & 995.133 & 0.353345 \\
- 1 & 700 & 100 & 976.031 & 0.438044 \\ 
- 1 & 800 & 100 & 959.766 & 0.466137 \\   
- 1 & 900 & 100 & 969.391 & 0.522619 \\
- 1 & 1000 & 100 & 972.207 & 0.585324 \\
- 1 & 2000 & 100 & 942.047 & 1.17845  \\
- 1 & 3000 & 100 & 938.467 & 1.88575 \\
- 1 & 4000 & 100 & 940.066 & 2.37096 \\
- 1 & 5000 & 100 & 927.209 & 3.02321 \\
- 1 & 6000 & 100 & 920.407 & 3.73201 \\
- 1 & 7000 & 100 & 919.812 & 4.54565 \\
- 1 & 8000 & 100 & 922.916 & 5.10203 \\
- 1 & 9000 & 100 & 929.764 & 5.55095 \\
- 1 & 10000 & 100 & 925.476 & 6.07093 \\
-\end{tabular}
+%\subsection{Simple Sequential}
+%\subsubsection{Population Based}
+%\begin{tabular}{ c | c | c | c | c }
+% 1 & 100 & 100 & 1006.61 & 0.0594495 \\
+% 1 & 200 & 100 & 971.531 & 0.116636 \\
+% 1 & 300 & 100 & 983.57 & 0.179451 \\
+% 1 & 400 & 100 & 940.753 & 0.23334 \\
+% 1 & 500 & 100 & 985.453 & 0.292069 \\
+% 1 & 600 & 100 & 995.133 & 0.353345 \\
+% 1 & 700 & 100 & 976.031 & 0.438044 \\ 
+% 1 & 800 & 100 & 959.766 & 0.466137 \\   
+% 1 & 900 & 100 & 969.391 & 0.522619 \\
+% 1 & 1000 & 100 & 972.207 & 0.585324 \\
+% 1 & 2000 & 100 & 942.047 & 1.17845  \\
+% 1 & 3000 & 100 & 938.467 & 1.88575 \\
+% 1 & 4000 & 100 & 940.066 & 2.37096 \\
+% 1 & 5000 & 100 & 927.209 & 3.02321 \\
+% 1 & 6000 & 100 & 920.407 & 3.73201 \\
+% 1 & 7000 & 100 & 919.812 & 4.54565 \\
+% 1 & 8000 & 100 & 922.916 & 5.10203 \\
+% 1 & 9000 & 100 & 929.764 & 5.55095 \\
+% 1 & 10000 & 100 & 925.476 & 6.07093 \\
+%\end{tabular}
 
-\subsubsection{Iteration Based}
-\begin{tabular}{ c | c | c | c | c }
- 1 & 100 & 100 & 1005.18 & 0.0612377 \\
- 1 & 100 & 200 & 879.523 & 0.117883 \\
- 1 & 100 & 300 & 800.886 & 0.174866 \\
- 1 & 100 & 400 & 791.031 & 0.237152 \\
- 1 & 100 & 500 & 716.329 & 0.292422 \\
- 1 & 100 & 600 & 700.984 & 0.351435 \\
- 1 & 100 & 700 & 698.819 & 0.41049 \\
- 1 & 100 & 800 & 685.63 & 0.476722 \\
- 1 & 100 & 900 & 667.82 & 0.530665 \\
- 1 & 100 & 1000 & 650.368 & 0.59416 \\
- 1 & 100 & 2000 & 573.286 & 1.23812 \\
- 1 & 100 & 3000 & 534.997 & 1.79002 \\
- 1 & 100 & 4000 & 521.264 & 2.36564 \\
- 1 & 100 & 5000 & 510.855 & 2.95029 \\
- 1 & 100 & 6000 & 503.941 & 3.781 \\
- 1 & 100 & 7000 & 505.155 & 4.3372 \\
- 1 & 100 & 8000 & 498.558 & 4.94316 \\
- 1 & 100 & 9000 & 502.808 & 5.59283 \\
- 1 & 100 & 10000 & 497.015 & 6.0404 \\
-\end{tabular}
+%\subsubsection{Iteration Based}
+%\begin{tabular}{ c | c | c | c | c }
+% 1 & 100 & 100 & 1005.18 & 0.0612377 \\
+% 1 & 100 & 200 & 879.523 & 0.117883 \\
+% 1 & 100 & 300 & 800.886 & 0.174866 \\
+% 1 & 100 & 400 & 791.031 & 0.237152 \\
+% 1 & 100 & 500 & 716.329 & 0.292422 \\
+% 1 & 100 & 600 & 700.984 & 0.351435 \\
+% 1 & 100 & 700 & 698.819 & 0.41049 \\
+% 1 & 100 & 800 & 685.63 & 0.476722 \\
+% 1 & 100 & 900 & 667.82 & 0.530665 \\
+% 1 & 100 & 1000 & 650.368 & 0.59416 \\
+% 1 & 100 & 2000 & 573.286 & 1.23812 \\
+% 1 & 100 & 3000 & 534.997 & 1.79002 \\
+% 1 & 100 & 4000 & 521.264 & 2.36564 \\
+% 1 & 100 & 5000 & 510.855 & 2.95029 \\
+% 1 & 100 & 6000 & 503.941 & 3.781 \\
+% 1 & 100 & 7000 & 505.155 & 4.3372 \\
+% 1 & 100 & 8000 & 498.558 & 4.94316 \\
+% 1 & 100 & 9000 & 502.808 & 5.59283 \\
+% 1 & 100 & 10000 & 497.015 & 6.0404 \\
+%\end{tabular}
 
-\subsubsection{Thread Based}
-\begin{tabular}{ c | c | c | c | c }
-1 & 500 & 10000 & 480.492 & 28.9301 \\
-2 & 500 & 10000 & 481.042 & 17.08 \\
-3 & 500 & 10000 & 486.164 & 19.4246 \\
-4 & 500 & 10000 & 481.419 & 16.1616 \\
-6 & 500 & 10000 & 478.596 & 18.4624 \\
-8 & 500 & 10000 & 484.597 & 18.7737 \\
-16 & 500 & 10000 & 484.133 & 19.2235 \\
-32 & 500 & 10000 & 485.378 & 20.5241 \\
-64 & 500 & 10000 & 480.417 & 20.9859 \\
-\end{tabular}
+%\subsubsection{Thread Based}
+%\begin{tabular}{ c | c | c | c | c }
+%1 & 500 & 10000 & 480.492 & 28.9301 \\
+%2 & 500 & 10000 & 481.042 & 17.08 \\
+%3 & 500 & 10000 & 486.164 & 19.4246 \\
+%4 & 500 & 10000 & 481.419 & 16.1616 \\
+%6 & 500 & 10000 & 478.596 & 18.4624 \\
+%8 & 500 & 10000 & 484.597 & 18.7737 \\
+%16 & 500 & 10000 & 484.133 & 19.2235 \\
+%32 & 500 & 10000 & 485.378 & 20.5241 \\
+%64 & 500 & 10000 & 480.417 & 20.9859 \\
+%\end{tabular}
 
 
 
