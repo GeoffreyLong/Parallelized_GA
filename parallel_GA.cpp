@@ -143,6 +143,7 @@ vector<City> initialize_cities(){
   //iifstream inFile("DataSets/pr2392.tsp"); int tourSize = 2392;
   
   vector<City> cities;
+  cities.reserve(tourSize);
 
   if (!inFile) {
     cerr << "Input file not found." << endl;
@@ -175,6 +176,8 @@ vector<City> initialize_cities(){
 
 vector< vector< int > > initialize_population(vector<City> cities, int populationSize){
   vector< vector< int > > population;
+  population.reserve(populationSize);
+
   int tourSize = cities.size();
 // NOTE1: Please note that this requires openmp 4.0, which requires gcc 4.9+
 // Alternatively can compile by removing the reduction on the for loop below 
@@ -186,6 +189,7 @@ vector< vector< int > > initialize_population(vector<City> cities, int populatio
 #pragma omp parallel for reduction(merge: population)
   for (int i = 0; i < populationSize; i++){
     vector<int> tour;
+    tour.reserve(tourSize);
     // Set the arrays
     // I haven't found a way to do this dynamically yet
     for (int j = 0; j < tourSize; j++){
@@ -252,15 +256,15 @@ int main(){
 #pragma omp parallel num_threads(numT)
 {
           for (int nIteration = 0; nIteration < maxNumIterations; nIteration++){
-#pragma omp for 
+#pragma omp for schedule(runtime)
             for (int i = 0; i < populationSize; i++){
               vector<int> tour = population[i];
 
               // Mutation Operators
-              vector<int> newTour = mutate_swap(tour);
+              //vector<int> newTour = mutate_swap(tour);
               //vector<int> newTour = mutate_swapNeighbors(tour);
               //vector<int> newTour = mutate_scramble(tour);
-              //vector<int> newTour = mutate_inversion(tour);
+              vector<int> newTour = mutate_inversion(tour);
 
               // Calculate the fitness of both tours
               double fitnessOne = calculate_fitness(tour, cities);
@@ -285,9 +289,6 @@ int main(){
 
             if (curFitness < bestFitness){
               bestFitness = curFitness;
-
-              //sort(tour.begin(), tour.end());
-              //print_tour(tour);
             }
           }
 }
@@ -308,7 +309,8 @@ int main(){
         }
 
         cout << "Threads=" << numT << " PopulationSize=" << populationSize << " maxNumIterations="
-          << maxNumIterations << " Fitness=" << fitness << " Speedup=" << (double) sequentialTime / (double) time << endl;
+          << maxNumIterations << " Fitness=" << fitness << " Speedup=" << (double) sequentialTime / (double) time
+          << " Runtime=" << time << endl;
       }
     }
   }
