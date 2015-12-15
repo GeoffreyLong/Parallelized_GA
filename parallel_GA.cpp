@@ -18,6 +18,7 @@ using namespace std;
 typedef unsigned long long timestamp_t;
 int numT;
 
+// Method for the timing
 static timestamp_t get_timestamp () {
   struct timeval now;
   gettimeofday (&now, NULL);
@@ -45,6 +46,7 @@ void print_tour(vector<int> tour){
 }
 
 vector<int> mutate_swap(vector<int> tour){
+  // Swap the cities at two randomly chosen indices
   int indexOne = rand() % tour.size();
   int indexTwo = rand() % tour.size();
   
@@ -57,6 +59,7 @@ vector<int> mutate_swap(vector<int> tour){
 }
 
 vector<int> mutate_swapNeighbors(vector<int> tour){
+  // Swap adjacent cities in the tour
   int indexOne = rand() % tour.size();
   int indexTwo = (indexOne+1) % tour.size();
   
@@ -68,6 +71,7 @@ vector<int> mutate_swapNeighbors(vector<int> tour){
 }
 
 vector<int> mutate_scramble(vector<int> tour){
+  // Scramble the elements between two randomly chosen indices
   int indexOne = rand() % tour.size();
   int indexTwo = rand() % tour.size();
   
@@ -89,6 +93,7 @@ vector<int> mutate_scramble(vector<int> tour){
 }
 
 vector<int> mutate_inversion(vector<int> tour){
+  // Reverse the elements between two randomly chosen indices
   int indexOne = rand() % tour.size();
   int indexTwo = rand() % tour.size();
   
@@ -111,6 +116,8 @@ vector<int> mutate_inversion(vector<int> tour){
 }
 
 double calculate_fitness(vector<int> tour, vector<City> cities){
+  // Iterate through the tour and find euclidean distance between points
+  // Sum these up to get the overall tour length
   double fitness = 0.0;
   for (int i = 1; i < tour.size(); i++){
     City startCity = cities[tour[i-1]];
@@ -142,6 +149,7 @@ vector<City> initialize_cities(){
   //ifstream inFile("DataSets/pr1002.tsp"); int tourSize = 1002;
   //iifstream inFile("DataSets/pr2392.tsp"); int tourSize = 2392;
   
+  // Reserve the number of cities
   vector<City> cities;
   cities.reserve(tourSize);
 
@@ -162,13 +170,11 @@ vector<City> initialize_cities(){
 
     // Not entirely sure that this will work for all files...
     // If the input stream does not have three args it is not a tour location
+    // All of the files seem to be formatted as nodeNum xPos yPos though
     if (!(iss >> nodeNum >> x >> y)) { continue; }
 
 
     cities.push_back(City(nodeNum, x, y));
-
-    // Check output
-    //cout << nodeNum << " " << x << " " << y << endl;
   }
 
   return cities;
@@ -179,9 +185,10 @@ vector< vector< int > > initialize_population(vector<City> cities, int populatio
   population.reserve(populationSize);
 
   int tourSize = cities.size();
-// NOTE1: Please note that this requires openmp 4.0, which requires gcc 4.9+
-// Alternatively can compile by removing the reduction on the for loop below 
-// And by uncommenting the line at the next NOTE1
+
+  // NOTE1: Please note that this requires openmp 4.0, which requires gcc 4.9+
+  // Alternatively can compile by removing the reduction on the for loop below 
+  // And by uncommenting the line at the next NOTE1
 #pragma omp declare reduction (merge : std::vector< vector<int> > : omp_out.insert(omp_out.end(), omp_in.begin(), omp_in.end()))
 
 #pragma omp parallel num_threads(numT)
@@ -190,6 +197,7 @@ vector< vector< int > > initialize_population(vector<City> cities, int populatio
   for (int i = 0; i < populationSize; i++){
     vector<int> tour;
     tour.reserve(tourSize);
+
     // Set the arrays
     // I haven't found a way to do this dynamically yet
     for (int j = 0; j < tourSize; j++){
@@ -221,99 +229,68 @@ int main(){
     return -1;
   }
 
+  // Set the parameters
+  int numT = 18;
+  int populationSize = 500;
+  int maxNumIterations = 10000;
 
-  // Some bookkeeping and loopers for testing
-  int nTimes = 10;
-  int sizes[10] = {25,50,100,250,500,1000,2500,5000,10000,25000};
-  int threads[36] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,
-    21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36};
-  double sequentialTime = 0;
-
-
-  for (int pop = 0; pop < 1; pop ++){
-    for (int iter = 0; iter < 1; iter ++){
-      for (int num_threads = 0; num_threads < 36; num_threads ++){
-        numT = threads[num_threads];
-        //int populationSize = sizes[pop];
-        //int maxNumIterations = sizes[iter];
-
-        int populationSize = 500;
-        int maxNumIterations = 10000;
-
-        double overallFitness = 0;
-        double overallTime = 0;
-
-        for (int x = 0; x < nTimes; x ++){
-          // TODO replace with omp_get_wtime()?
-          double t0 = get_timestamp();
-          srand(time(0));
+  // TODO replace with omp_get_wtime()?
+  double t0 = get_timestamp();
+  srand(time(0));
 
 
-          // Initialize population randomly
-          vector< vector< int > > population = initialize_population(cities, populationSize);
+  // Initialize population randomly
+  vector< vector< int > > population = initialize_population(cities, populationSize);
 
-          // Run the algorithm for a specific number of iterations
+  // Run the algorithm for a specific number of iterations
 #pragma omp parallel num_threads(numT)
 {
-          for (int nIteration = 0; nIteration < maxNumIterations; nIteration++){
+  for (int nIteration = 0; nIteration < maxNumIterations; nIteration++){
 #pragma omp for schedule(runtime)
-            for (int i = 0; i < populationSize; i++){
-              vector<int> tour = population[i];
+    for (int i = 0; i < populationSize; i++){
+      vector<int> tour = population[i];
 
-              // Mutation Operators
-              //vector<int> newTour = mutate_swap(tour);
-              //vector<int> newTour = mutate_swapNeighbors(tour);
-              //vector<int> newTour = mutate_scramble(tour);
-              vector<int> newTour = mutate_inversion(tour);
+      // Mutation Operators
+      //vector<int> newTour = mutate_swap(tour);
+      //vector<int> newTour = mutate_swapNeighbors(tour);
+      //vector<int> newTour = mutate_scramble(tour);
+      vector<int> newTour = mutate_inversion(tour);
 
-              // Calculate the fitness of both tours
-              double fitnessOne = calculate_fitness(tour, cities);
-              double fitnessTwo = calculate_fitness(newTour, cities);
+      // Calculate the fitness of both tours
+      double fitnessOne = calculate_fitness(tour, cities);
+      double fitnessTwo = calculate_fitness(newTour, cities);
 
-              // Take the better performing individual
-              if (fitnessTwo < fitnessOne){
-                population[i] = newTour;
-              }
-            }
-          }
-}
-
-          double bestFitness = std::numeric_limits<double>::max();
-
-#pragma omp parallel num_threads(numT)
-{
-#pragma omp parallel for reduction(min : bestFitness)
-          for (int i = 0; i < populationSize; i++){
-            vector<int> tour = population[i];
-            double curFitness = calculate_fitness(tour, cities);
-
-            if (curFitness < bestFitness){
-              bestFitness = curFitness;
-            }
-          }
-}
-
-
-          timestamp_t t1 = get_timestamp();
-          double execTime = (t1 - t0) / 1000000.0L;
-
-          overallFitness += bestFitness;
-          overallTime += execTime;
-        } 
-
-        double time = overallTime / nTimes;
-        double fitness = overallFitness / nTimes;
-
-        if (numT == 1){
-          sequentialTime = (double) time;
-        }
-
-        cout << "Threads=" << numT << " PopulationSize=" << populationSize << " maxNumIterations="
-          << maxNumIterations << " Fitness=" << fitness << " Speedup=" << (double) sequentialTime / (double) time
-          << " Runtime=" << time << endl;
+      // Take the better performing individual
+      if (fitnessTwo < fitnessOne){
+        population[i] = newTour;
       }
     }
   }
+}
+
+  // Get the fitness of the best performing individual
+  double bestFitness = std::numeric_limits<double>::max();
+#pragma omp parallel num_threads(numT)
+{
+#pragma omp parallel for reduction(min : bestFitness)
+  for (int i = 0; i < populationSize; i++){
+    vector<int> tour = population[i];
+    double curFitness = calculate_fitness(tour, cities);
+
+    if (curFitness < bestFitness){
+      bestFitness = curFitness;
+    }
+  }
+}
+
+
+  // Get the runtime 
+  timestamp_t t1 = get_timestamp();
+  double execTime = (t1 - t0) / 1000000.0L;
+
+  // Print the results and parameters
+  cout << "Threads=" << numT << " PopulationSize=" << populationSize << " maxNumIterations="
+    << maxNumIterations << " Fitness=" << bestFitness << " Runtime=" << execTime << endl;
 
   return 0;
 
