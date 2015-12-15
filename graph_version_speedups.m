@@ -13,7 +13,7 @@ p = plot(x,y,x,y1,x,y2);
 hold on;
 
 %title('Graph of Speedup for Lenovo');
-title('Debondt Speedups over Several Datasets');
+title('Debondt Speedups for Different Versions');
 xlabel('# of Threads') 
 ylabel('Speedup') 
 
